@@ -3,74 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de Despesas Domésticas</title>
+    <title>Dashboard Financeiro & BI</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="sidebar">
+        <h2><i class="fas fa-chart-pie"></i> BI Financeiro</h2>
+        <ul>
+            <li class="active"><i class="fas fa-home"></i> Visão Geral</li>
+            <li><i class="fas fa-wallet"></i> Transações</li>
+            <li><i class="fas fa-bullseye"></i> Metas</li>
+        </ul>
+    </div>
+
+    <div class="main-content">
         <header>
-            <h1><i class="fas fa-wallet"></i> Minhas Despesas</h1>
-            <p>Gerencie o orçamento da sua casa de forma simples</p>
+            <h1>Despesas do Mês</h1>
+            <p>Acompanhamento inteligente do seu orçamento doméstico</p>
         </header>
 
         <section class="dashboard">
             <div class="card income">
-                <h3>Entradas</h3>
-                <p id="total-income">R$ 0,00</p>
+                <div class="card-icon"><i class="fas fa-arrow-up"></i></div>
+                <div class="card-info">
+                    <h3>Receitas Totais</h3>
+                    <p id="total-income">R$ 0,00</p>
+                </div>
             </div>
             <div class="card expense">
-                <h3>Saídas</h3>
-                <p id="total-expense">R$ 0,00</p>
+                <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
+                <div class="card-info">
+                    <h3>Despesas Totais</h3>
+                    <p id="total-expense">R$ 0,00</p>
+                </div>
             </div>
             <div class="card balance">
-                <h3>Saldo Total</h3>
-                <p id="total-balance">R$ 0,00</p>
+                <div class="card-icon"><i class="fas fa-piggy-bank"></i></div>
+                <div class="card-info">
+                    <h3>Saldo Líquido</h3>
+                    <p id="total-balance">R$ 0,00</p>
+                </div>
             </div>
         </section>
 
-        <main>
+        <div class="bi-grid">
+            <div class="chart-container">
+                <h3>Despesas por Categoria</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Fluxo de Caixa Mensal</h3>
+                <canvas id="cashflowChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bottom-grid">
             <section class="add-transaction">
-                <h2>Nova Transação</h2>
+                <h2>Lançar Movimentação</h2>
                 <form id="transaction-form">
-                    <div class="form-group">
-                        <label for="desc">Descrição</label>
-                        <input type="text" id="desc" placeholder="Ex: Conta de Luz" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Descrição</label>
+                            <input type="text" id="desc" placeholder="Ex: Conta de Luz" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Valor (R$)</label>
+                            <input type="number" id="amount" step="0.01" placeholder="0.00" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="amount">Valor (R$)</label>
-                        <input type="number" id="amount" step="0.01" placeholder="0.00" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Tipo</label>
+                            <select id="type" required>
+                                <option value="expense">Saída (Despesa)</option>
+                                <option value="income">Entrada (Receita)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="category" required>
+                                <option value="Moradia">Moradia (Aluguel, Luz, Água)</option>
+                                <option value="Alimentação">Alimentação</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Saúde">Saúde</option>
+                                <option value="Lazer">Lazer</option>
+                                <option value="Salário">Salário/Renda</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="type">Tipo</label>
-                        <select id="type" required>
-                            <option value="expense">Despesa (Saída)</option>
-                            <option value="income">Receita (Entrada)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="category">Categoria</label>
-                        <select id="category" required>
-                            <option value="casa">Casa/Moradia</option>
-                            <option value="alimentacao">Alimentação</option>
-                            <option value="transporte">Transporte</option>
-                            <option value="saude">Saúde</option>
-                            <option value="lazer">Lazer</option>
-                            <option value="salario">Salário/Renda</option>
-                            <option value="outros">Outros</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Adicionar</button>
+                    <button type="submit" class="btn"><i class="fas fa-plus"></i> Registrar</button>
                 </form>
             </section>
-
             <section class="transaction-list">
-                <h2>Histórico</h2>
-                <ul id="list">
-                    <!-- Transactions will be added here dynamically -->
-                </ul>
+                <h2>Últimos Lançamentos</h2>
+                <ul id="list"></ul>
             </section>
-        </main>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>
