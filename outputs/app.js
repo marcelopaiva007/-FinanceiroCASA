@@ -141,3 +141,31 @@ function init() {
 
 init();
 form.addEventListener('submit', addTransaction);
+
+// --- NEW FEATURES: Dark Mode & Export ---
+const themeToggleBtn = document.getElementById('theme-toggle');
+const exportBtn = document.getElementById('export-btn');
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        updateCharts(); // Refresh chart colors
+    });
+}
+
+if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+        if (transactions.length === 0) return alert('Sem dados.');
+        const rows = ['Data,Descricao,Categoria,Valor'];
+        transactions.forEach(t => {
+            rows.push([t.date || '', '"'+t.desc+'"', '"'+t.category+'"', t.amount].join(','));
+        });
+        const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'Dashboard_Export.csv';
+        link.click();
+    });
+}

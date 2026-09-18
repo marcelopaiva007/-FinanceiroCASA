@@ -49,3 +49,15 @@ button.btn:hover { background: #2563eb; }
 .transaction-cat { font-size: 0.8rem; color: #6b7280; }
 .transaction-amount { font-weight: bold; font-size: 1.1rem; }
 .delete-btn { background: var(--expense); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; margin-left: 15px; }
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --text-color: #f8fafc;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+}
+[data-theme="dark"] input, [data-theme="dark"] select {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-color: #334155;
+}
