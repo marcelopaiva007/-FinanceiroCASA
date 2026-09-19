@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Financeiro & BI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2><i class="fas fa-chart-pie"></i> BI Financeiro</h2>
+        <ul>
+            <li id="tab-overview" class="active" style="cursor:pointer"><i class="fas fa-home"></i> Visão Geral</li>
+            <li id="tab-transactions" style="cursor:pointer"><i class="fas fa-wallet"></i> Transações</li>
+            <li id="tab-goals" style="cursor:pointer"><i class="fas fa-bullseye"></i> Metas</li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <header style="position: relative;">
+            <div>
+                <h1>Despesas do Mês</h1>
+                <p>Acompanhamento inteligente do seu orçamento</p>
+            </div>
+            <div style="position: absolute; right: 0; top: 0; display: flex; gap: 10px;">
+                <button id="export-btn" class="btn-theme" title="Exportar Excel" style="background:var(--card-bg); border:none; padding:12px; border-radius:12px; cursor:pointer; color:var(--text-color);"><i class="fas fa-file-csv"></i></button>
+                <button id="theme-toggle" class="btn-theme" title="Modo Escuro" style="background:var(--card-bg); border:none; padding:12px; border-radius:12px; cursor:pointer; color:var(--text-color);"><i class="fas fa-moon"></i></button>
+            </div>
+        </header>
+
+        <div id="view-overview" class="view-section">
+            <section class="dashboard">
+                <div class="card income">
+                    <div class="card-icon"><i class="fas fa-arrow-up"></i></div>
+                    <div class="card-info">
+                        <h3>Receitas Totais</h3>
+                        <p id="total-income">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card expense">
+                    <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
+                    <div class="card-info">
+                        <h3>Despesas Totais</h3>
+                        <p id="total-expense">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card balance">
+                    <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                    <div class="card-info">
+                        <h3>Saldo Atual</h3>
+                        <p id="total-balance">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Lançamento Rápido</h3>
+                    <form id="form">
+                        <div class="form-group">
+                            <label for="date">Data</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="desc">Descrição</label>
+                            <input type="text" id="desc" placeholder="Ex: Conta de Luz" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Valor (R$)</label>
+                            <input type="number" id="amount" placeholder="Valores negativos para despesas" required step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Categoria</label>
+                            <select id="category" required>
+                                <option value="Moradia">Moradia</option>
+                                <option value="Alimentação">Alimentação</option>
+                                <option value="Transporte">Transporte</option>
+                                <option value="Saúde">Saúde</option>
+                                <option value="Lazer">Lazer</option>
+                                <option value="Receita">Receita / Salário</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn">Registrar Transação</button>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>Despesas por Categoria</h3>
+                    <div style="height: 250px;"><canvas id="categoryChart"></canvas></div>
+                </div>
+                <div class="card" style="grid-column: span 2;">
+                    <h3>Fluxo de Caixa</h3>
+                    <div style="height: 250px;"><canvas id="cashflowChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-transactions" class="view-section" style="display: none; padding-top: 20px;">
+            <div class="card">
+                <h3>Histórico Completo</h3>
+                <ul id="list" class="list"></ul>
+            </div>
+        </div>
+
+        <div id="view-goals" class="view-section" style="display: none; padding-top: 20px;">
+            <div class="card" style="text-align: center; padding: 40px;">
+                <i class="fas fa-bullseye" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 20px;"></i>
+                <h3>Metas Financeiras</h3>
+                <p style="color: var(--text-muted); margin-top: 10px;">Em breve: Acompanhamento de objetivos e simulações financeiras.</p>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+        const t1 = document.getElementById('tab-overview');
+        const t2 = document.getElementById('tab-transactions');
+        const t3 = document.getElementById('tab-goals');
+        const v1 = document.getElementById('view-overview');
+        const v2 = document.getElementById('view-transactions');
+        const v3 = document.getElementById('view-goals');
+        
+        function resetTabs() {
+            t1.classList.remove('active'); t2.classList.remove('active'); t3.classList.remove('active');
+            v1.style.display = 'none'; v2.style.display = 'none'; v3.style.display = 'none';
+        }
+        
+        t1.addEventListener('click', () => { resetTabs(); t1.classList.add('active'); v1.style.display = 'block'; });
+        t2.addEventListener('click', () => { resetTabs(); t2.classList.add('active'); v2.style.display = 'block'; });
+        t3.addEventListener('click', () => { resetTabs(); t3.classList.add('active'); v3.style.display = 'block'; });
+    </script>
+</body>
+</html>
