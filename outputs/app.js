@@ -119,3 +119,69 @@ if(exportBtn) {
 }
 
 init();
+
+// --- LOGICA DE IMPORTACAO (OCR E CSV) ---
+const importFile = document.getElementById('import-file');
+if(importFile) {
+    importFile.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+
+        if(file.name.endsWith('.csv')) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const rows = text.split('
+').slice(1);
+                let added = 0;
+                rows.forEach(row => {
+                    const cols = row.split(',');
+                    if(cols.length >= 4) {
+                        let dateVal = cols[0].trim() || new Date().toISOString().split('T')[0];
+                        let descVal = cols[1].replace(/"/g, '').trim();
+                        let catVal = cols[2].replace(/"/g, '').trim();
+                        let amountVal = parseFloat(cols[3].trim());
+                        if(!isNaN(amountVal) && descVal) {
+                            transactions.push({ id: Math.floor(Math.random() * 100000000), date: dateVal, desc: descVal, amount: amountVal, category: catVal || 'Outros' });
+                            added++;
+                        }
+                    }
+                });
+                if(added > 0) {
+                    localStorage.setItem('transactions', JSON.stringify(transactions));
+                    init();
+                    alert(added + ' transacoes importadas com sucesso do CSV!');
+                }
+            };
+            reader.readAsText(file);
+        } else if (file.type.startsWith('image/')) {
+            alert('Iniciando Inteligencia Artificial (OCR) para ler a foto. Isso pode levar de 5 a 15 segundos...');
+            try {
+                const result = await Tesseract.recognize(file, 'por');
+                const text = result.data.text;
+                
+                // Tenta rastrear formato financeiro (ex: R$ 149,90 ou 149.00)
+                const amountMatch = text.match(/(?:R$|R$s*)?s*(d+[.,]d{2})/i);
+                let foundAmount = '';
+                if(amountMatch) foundAmount = amountMatch[1].replace(',', '.');
+                
+                const descEl = document.getElementById('desc');
+                const amountEl = document.getElementById('amount');
+                
+                if(descEl) descEl.value = "Lido por IA (Recibo)";
+                if(amountEl && foundAmount) amountEl.value = -Math.abs(parseFloat(foundAmount));
+                
+                // Volta pra home para exibir o preenchimento
+                const overviewTab = document.getElementById('tab-overview');
+                if(overviewTab) overviewTab.click();
+                
+                alert('Foto lida! Confira se a IA capturou o valor correto no formulário, ajuste a categoria e salve.');
+            } catch(err) {
+                alert('Erro na leitura óptica: ' + err.message);
+            }
+        } else {
+            alert('Formato incompatível. Use CSV ou Fotos.');
+        }
+        importFile.value = '';
+    });
+}
