@@ -169,3 +169,87 @@ if (exportBtn) {
         link.click();
     });
 }
+
+// --- SISTEMA DE NAVEGACAO SPA (ABAS) ---
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebarItems = document.querySelectorAll('.sidebar li');
+    if(sidebarItems.length >= 3) {
+        sidebarItems.forEach(item => item.classList.add('tab-btn'));
+    }
+
+    const mainContent = document.querySelector('.main-content');
+    if(!mainContent) return;
+    const header = mainContent.querySelector('header');
+    
+    // Empacota o painel principal (Overview)
+    const overviewDiv = document.createElement('div');
+    overviewDiv.id = 'view-overview';
+    overviewDiv.className = 'view-section';
+    
+    while(header.nextSibling) {
+        overviewDiv.appendChild(header.nextSibling);
+    }
+    mainContent.appendChild(overviewDiv);
+
+    // Cria a view de Transacoes
+    const transDiv = document.createElement('div');
+    transDiv.id = 'view-transactions';
+    transDiv.className = 'view-section';
+    transDiv.style.display = 'none';
+    transDiv.innerHTML = '<div style="padding: 20px;"><h2 style="margin-bottom:20px;">Histórico Completo</h2><ul id="full-tx-list" class="list"></ul></div>';
+    mainContent.appendChild(transDiv);
+
+    // Cria a view de Metas
+    const goalsDiv = document.createElement('div');
+    goalsDiv.id = 'view-goals';
+    goalsDiv.className = 'view-section';
+    goalsDiv.style.display = 'none';
+    goalsDiv.innerHTML = '<div style="padding: 20px;"><h2 style="margin-bottom:20px;">Metas Financeiras</h2><div class="card" style="margin-top:20px;text-align:center;padding:40px;"><i class="fas fa-bullseye" style="font-size:3rem;color:var(--text-muted);margin-bottom:15px;"></i><p>Em breve: Definição e acompanhamento inteligente de metas mensais e economia.</p></div></div>';
+    mainContent.appendChild(goalsDiv);
+
+    const tabs = document.querySelectorAll('.tab-btn');
+    
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            // Remove active status
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Esconde tudo
+            overviewDiv.style.display = 'none';
+            transDiv.style.display = 'none';
+            goalsDiv.style.display = 'none';
+            
+            // Mostra a selecionada
+            if(index === 0) overviewDiv.style.display = 'block';
+            if(index === 1) {
+                transDiv.style.display = 'block';
+                renderFullTransactions();
+            }
+            if(index === 2) goalsDiv.style.display = 'block';
+        });
+    });
+
+    // Funcao para renderizar as transacoes na nova guia
+    function renderFullTransactions() {
+        const list = document.getElementById('full-tx-list');
+        if(!list) return;
+        list.innerHTML = '';
+        const sorted = [...transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
+        sorted.forEach(t => {
+            const sign = t.amount < 0 ? '-' : '+';
+            const li = document.createElement('li');
+            li.classList.add(t.amount < 0 ? 'minus' : 'plus');
+            let dateStr = '';
+            if(t.date) {
+                const parts = t.date.split('-');
+                if(parts.length === 3) dateStr = parts[2] + '/' + parts[1] + '/' + parts[0] + ' - ';
+            }
+            li.innerHTML = `
+                ${dateStr}${t.desc} 
+                <span>${sign}R$ ${Math.abs(t.amount).toFixed(2).replace('.',',')}</span>
+            `;
+            list.appendChild(li);
+        });
+    }
+});
