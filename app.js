@@ -404,7 +404,7 @@ function populateMonthYearSelectors() {
     // Extrair todos os meses e anos distintos presentes nas transações
     const periodsSet = new Set();
     const yearsSet = new Set();
-    getFilteredTransactions().forEach(t => {
+    transactions.forEach(t => {
         if (t.date && t.date.length >= 7) {
             const ym = t.date.substring(0, 7);
             periodsSet.add(ym);
