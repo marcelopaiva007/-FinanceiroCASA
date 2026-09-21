@@ -9,7 +9,31 @@ const balance = document.getElementById('total-balance');
 const money_plus = document.getElementById('total-income');
 const money_minus = document.getElementById('total-expense');
 
+
+const defaultAugustTransactions = [
+    { id: 201, date: "2026-08-01", desc: "Unimed", amount: -1500.00, category: "Saúde" },
+    { id: 202, date: "2026-08-02", desc: "Escola", amount: -1200.00, category: "Outros" },
+    { id: 203, date: "2026-08-03", desc: "Polo", amount: -850.00, category: "Transporte" },
+    { id: 204, date: "2026-08-04", desc: "VIVO", amount: -250.00, category: "Moradia" },
+    { id: 205, date: "2026-08-05", desc: "Dra. Fábia", amount: -500.00, category: "Saúde" },
+    { id: 206, date: "2026-08-06", desc: "Água e Luz", amount: -420.00, category: "Moradia" },
+    { id: 207, date: "2026-08-07", desc: "Gasolina", amount: -400.00, category: "Transporte" },
+    { id: 208, date: "2026-08-08", desc: "Dra. Roberta", amount: -350.00, category: "Saúde" },
+    { id: 209, date: "2026-08-09", desc: "Mercado", amount: -1800.00, category: "Alimentação" },
+    { id: 210, date: "2026-08-10", desc: "Cartão de Crédito", amount: -2450.00, category: "Outros" },
+    { id: 211, date: "2026-08-11", desc: "Farmácia", amount: -180.00, category: "Saúde" },
+    { id: 212, date: "2026-08-12", desc: "Academia", amount: -160.00, category: "Lazer" },
+    { id: 101, date: "2026-08-01", desc: "Receita / Salário", amount: 12000.00, category: "Receita" }
+];
+
 let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+const hasAugustExpenses = transactions.some(t => t.date && t.date.startsWith('2026-08'));
+if (!hasAugustExpenses) {
+    transactions = [...defaultAugustTransactions, ...transactions];
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
 
 function formatDateBr(dateString) {
     if(!dateString) return '';
