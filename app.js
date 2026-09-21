@@ -126,10 +126,42 @@ function updateCharts() {
         if(catChartInstance) catChartInstance.destroy();
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const textColor = isDark ? '#f8fafc' : '#334155';
+        const isMobile = window.innerWidth < 768;
         catChartInstance = new Chart(ctx1, {
             type: 'doughnut',
-            data: { labels: Object.keys(catTotals), datasets: [{ data: Object.values(catTotals), backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#64748b'], borderWidth: 0 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor } } } }
+            data: { 
+                labels: Object.keys(catTotals), 
+                datasets: [{ 
+                    data: Object.values(catTotals), 
+                    backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#64748b'], 
+                    borderWidth: 2,
+                    borderColor: isDark ? '#1e293b' : '#ffffff'
+                }] 
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { 
+                        position: isMobile ? 'bottom' : 'right', 
+                        labels: { 
+                            color: textColor,
+                            boxWidth: 14,
+                            padding: 12,
+                            font: { size: 12 }
+                        } 
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const val = context.parsed || 0;
+                                return " R$ " + val.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                            }
+                        }
+                    }
+                },
+                cutout: '65%'
+            }
         });
     }
 
