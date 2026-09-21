@@ -64,19 +64,24 @@ const defaultAugustTransactions = [
     { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 22000.00, category: 'Receita' }
 ];
 
+const DATA_VERSION = 'v4_august_full';
 let transactions = defaultAugustTransactions;
+
 try {
+    const currentVersion = localStorage.getItem('data_version');
     const saved = localStorage.getItem('transactions');
-    if (saved) {
-        const parsed = JSON.parse(saved);
-        const existingIds = new Set(parsed.map(t => t.id));
-        const toAdd = defaultAugustTransactions.filter(t => !existingIds.has(t.id));
-        transactions = [...parsed, ...toAdd];
+    if (currentVersion !== DATA_VERSION || !saved) {
+        transactions = defaultAugustTransactions;
+        localStorage.setItem('transactions', JSON.stringify(transactions));
+        localStorage.setItem('data_version', DATA_VERSION);
+    } else {
+        transactions = JSON.parse(saved);
     }
 } catch (e) {
     transactions = defaultAugustTransactions;
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    localStorage.setItem('data_version', DATA_VERSION);
 }
-localStorage.setItem('transactions', JSON.stringify(transactions));
 
 
 function formatDateBr(dateString) {
@@ -251,5 +256,18 @@ if(importFile) {
             alert('Formato incompatível. Use CSV ou Fotos.');
         }
         importFile.value = '';
+    });
+}
+
+const resetDataBtn = document.getElementById('reset-data-btn');
+if (resetDataBtn) {
+    resetDataBtn.addEventListener('click', () => {
+        if (confirm('Deseja recarregar todas as despesas consolidadas de Agosto de 2026?')) {
+            localStorage.setItem('transactions', JSON.stringify(defaultAugustTransactions));
+            localStorage.setItem('data_version', 'v4_august_full');
+            transactions = [...defaultAugustTransactions];
+            init();
+            alert('Todas as despesas de Agosto de 2026 foram carregadas com sucesso!');
+        }
     });
 }
