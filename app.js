@@ -766,11 +766,6 @@ const CATEGORY_LIST = [
         "color": "#d946ef"
     },
     {
-        "value": "Cartão",
-        "label": "12. Cartão de Crédito",
-        "color": "#64748b"
-    },
-    {
         "value": "Outros",
         "label": "Outros",
         "color": "#94a3b8"
