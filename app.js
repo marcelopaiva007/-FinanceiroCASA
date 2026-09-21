@@ -1,3 +1,17 @@
+
+function showAutoSaveToast(msg) {
+    const toast = document.getElementById("toast-notification");
+    const toastMsg = document.getElementById("toast-message");
+    if (!toast) return;
+    if (toastMsg) toastMsg.innerText = msg || "Alteração salva automaticamente com sucesso!";
+    toast.style.display = "flex";
+    toast.style.opacity = "1";
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        setTimeout(() => { toast.style.display = "none"; }, 300);
+    }, 2200);
+}
+
 const form = document.getElementById('form');
 const desc = document.getElementById('desc');
 const amount = document.getElementById('amount');
@@ -1057,6 +1071,7 @@ function renderCategorizeTable() {
                 updateCharts();
                 if (typeof updateDynamicMonthlyReport === "function") updateDynamicMonthlyReport();
                 renderCategorizeTable();
+                showAutoSaveToast(`Categoria alterada para "${newCat}" e salva automaticamente!`);
             }
         });
     });
