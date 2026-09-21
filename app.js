@@ -11,60 +11,335 @@ const max_expense = document.getElementById('max-expense');
 
 
 const defaultAugustTransactions = [
-    // --- Relatório 1 (Fatura Principal) ---
-    { id: 201, date: '2026-08-01', desc: 'Unimed', amount: -1500.00, category: 'Saúde' },
-    { id: 202, date: '2026-08-02', desc: 'Escola', amount: -1200.00, category: 'Educação' },
-    { id: 203, date: '2026-08-03', desc: 'Polo', amount: -850.00, category: 'Transporte' },
-    { id: 204, date: '2026-08-04', desc: 'VIVO', amount: -250.00, category: 'Moradia' },
-    { id: 205, date: '2026-08-05', desc: 'Dra. Fábia', amount: -500.00, category: 'Saúde' },
-    { id: 206, date: '2026-08-06', desc: 'Água e Luz', amount: -420.00, category: 'Moradia' },
-    { id: 207, date: '2026-08-07', desc: 'Gasolina', amount: -400.00, category: 'Transporte' },
-    { id: 208, date: '2026-08-08', desc: 'Dra. Roberta', amount: -350.00, category: 'Saúde' },
-    { id: 209, date: '2026-08-09', desc: 'Mercado', amount: -1800.00, category: 'Alimentação' },
-    { id: 210, date: '2026-08-10', desc: 'Cartão de Crédito', amount: -2450.00, category: 'Cartão' },
-    { id: 211, date: '2026-08-11', desc: 'Farmácia', amount: -180.00, category: 'Saúde' },
-    { id: 212, date: '2026-08-12', desc: 'Academia', amount: -160.00, category: 'Lazer' },
-
-    // --- Relatório 2 (Despesas Diárias / Familiares) ---
-    { id: 213, date: '2026-08-13', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
-    { id: 214, date: '2026-08-13', desc: 'Faxina baía', amount: -200.00, category: 'Moradia' },
-    { id: 215, date: '2026-08-14', desc: 'Aline', amount: -500.00, category: 'Pessoal' },
-    { id: 216, date: '2026-08-14', desc: 'Davi', amount: -100.00, category: 'Educação' },
-    { id: 217, date: '2026-08-15', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
-    { id: 218, date: '2026-08-15', desc: 'Carne', amount: -100.00, category: 'Alimentação' },
-    { id: 219, date: '2026-08-16', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
-    { id: 220, date: '2026-08-16', desc: 'Água', amount: -20.00, category: 'Moradia' },
-    { id: 221, date: '2026-08-17', desc: 'Condomínio', amount: -700.00, category: 'Moradia' },
-    { id: 222, date: '2026-08-18', desc: 'Aline', amount: -400.00, category: 'Pessoal' },
-    { id: 223, date: '2026-08-18', desc: 'Frutas', amount: -50.00, category: 'Alimentação' },
-    { id: 224, date: '2026-08-19', desc: 'Carne', amount: -200.00, category: 'Alimentação' },
-    { id: 225, date: '2026-08-20', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
-    { id: 226, date: '2026-08-21', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
-    { id: 227, date: '2026-08-22', desc: 'Padaria', amount: -60.00, category: 'Alimentação' },
-    { id: 228, date: '2026-08-23', desc: 'Escola', amount: -20.00, category: 'Educação' },
-    { id: 229, date: '2026-08-24', desc: 'Aline', amount: -400.00, category: 'Pessoal' },
-    { id: 230, date: '2026-08-25', desc: 'Frutas', amount: -50.00, category: 'Alimentação' },
-    { id: 231, date: '2026-08-26', desc: 'Futsal', amount: -110.00, category: 'Lazer' },
-
-    // --- Relatório 3 (Custos Adicionais da Imagem) ---
-    { id: 232, date: '2026-08-27', desc: 'Farmácia', amount: -130.00, category: 'Saúde' },
-    { id: 233, date: '2026-08-27', desc: 'Carne', amount: -150.00, category: 'Alimentação' },
-    { id: 234, date: '2026-08-28', desc: 'Frutas', amount: -60.00, category: 'Alimentação' },
-    { id: 235, date: '2026-08-28', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
-    { id: 236, date: '2026-08-29', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
-    { id: 237, date: '2026-08-29', desc: 'Água', amount: -20.00, category: 'Moradia' },
-    { id: 238, date: '2026-08-30', desc: 'Padaria', amount: -60.00, category: 'Alimentação' },
-    { id: 239, date: '2026-08-30', desc: 'Carne', amount: -150.00, category: 'Alimentação' },
-    { id: 240, date: '2026-08-31', desc: 'Aline', amount: -300.00, category: 'Pessoal' },
-    { id: 241, date: '2026-08-31', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
-    { id: 242, date: '2026-08-31', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
-        { id: 243, date: '2026-08-31', desc: 'Plano de Saúde', amount: -3300.00, category: 'Saúde' },
-    { id: 244, date: '2026-08-20', desc: 'Despesa do carro', amount: -2200.00, category: 'Transporte' },
-    { id: 245, date: '2026-08-10', desc: 'Energia', amount: -450.00, category: 'Moradia' },
-    { id: 246, date: '2026-08-15', desc: 'Limpeza da piscina', amount: -200.00, category: 'Moradia' },
-    { id: 247, date: '2026-08-25', desc: 'Corte de grama', amount: -220.00, category: 'Moradia' }
-
-
+    {
+        "id": 201,
+        "date": "2026-08-01",
+        "desc": "Unimed",
+        "amount": -1500,
+        "category": "Plano de Saúde"
+    },
+    {
+        "id": 202,
+        "date": "2026-08-02",
+        "desc": "Escola",
+        "amount": -1200,
+        "category": "Educação"
+    },
+    {
+        "id": 203,
+        "date": "2026-08-03",
+        "desc": "Polo",
+        "amount": -850,
+        "category": "Parcela de Veículo e Manutenção"
+    },
+    {
+        "id": 204,
+        "date": "2026-08-04",
+        "desc": "VIVO",
+        "amount": -250,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 205,
+        "date": "2026-08-05",
+        "desc": "Dra. Fábia",
+        "amount": -500,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 206,
+        "date": "2026-08-06",
+        "desc": "Água e Luz",
+        "amount": -420,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 207,
+        "date": "2026-08-07",
+        "desc": "Gasolina",
+        "amount": -400,
+        "category": "Parcela de Veículo e Manutenção"
+    },
+    {
+        "id": 208,
+        "date": "2026-08-08",
+        "desc": "Dra. Roberta",
+        "amount": -350,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 209,
+        "date": "2026-08-09",
+        "desc": "Mercado",
+        "amount": -1800,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 210,
+        "date": "2026-08-10",
+        "desc": "Cartão de Crédito",
+        "amount": -2450,
+        "category": "Cartão"
+    },
+    {
+        "id": 211,
+        "date": "2026-08-11",
+        "desc": "Farmácia",
+        "amount": -180,
+        "category": "Farmacia"
+    },
+    {
+        "id": 212,
+        "date": "2026-08-12",
+        "desc": "Academia",
+        "amount": -160,
+        "category": "Lazer"
+    },
+    {
+        "id": 213,
+        "date": "2026-08-13",
+        "desc": "Terapia",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 214,
+        "date": "2026-08-13",
+        "desc": "Faxina baía",
+        "amount": -200,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 215,
+        "date": "2026-08-14",
+        "desc": "Aline",
+        "amount": -500,
+        "category": "Pessoal"
+    },
+    {
+        "id": 216,
+        "date": "2026-08-14",
+        "desc": "Davi",
+        "amount": -100,
+        "category": "Educação"
+    },
+    {
+        "id": 217,
+        "date": "2026-08-15",
+        "desc": "Terapia",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 218,
+        "date": "2026-08-15",
+        "desc": "Carne",
+        "amount": -100,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 219,
+        "date": "2026-08-16",
+        "desc": "Terapia Davi",
+        "amount": -180,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 220,
+        "date": "2026-08-16",
+        "desc": "Água",
+        "amount": -20,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 221,
+        "date": "2026-08-17",
+        "desc": "Condomínio",
+        "amount": -700,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 222,
+        "date": "2026-08-18",
+        "desc": "Aline",
+        "amount": -400,
+        "category": "Pessoal"
+    },
+    {
+        "id": 223,
+        "date": "2026-08-18",
+        "desc": "Frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 224,
+        "date": "2026-08-19",
+        "desc": "Carne",
+        "amount": -200,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 225,
+        "date": "2026-08-20",
+        "desc": "Terapia",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 226,
+        "date": "2026-08-21",
+        "desc": "Terapia Davi",
+        "amount": -180,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 227,
+        "date": "2026-08-22",
+        "desc": "Padaria",
+        "amount": -60,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 228,
+        "date": "2026-08-23",
+        "desc": "Escola",
+        "amount": -20,
+        "category": "Educação"
+    },
+    {
+        "id": 229,
+        "date": "2026-08-24",
+        "desc": "Aline",
+        "amount": -400,
+        "category": "Pessoal"
+    },
+    {
+        "id": 230,
+        "date": "2026-08-25",
+        "desc": "Frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 231,
+        "date": "2026-08-26",
+        "desc": "Futsal",
+        "amount": -110,
+        "category": "Lazer"
+    },
+    {
+        "id": 232,
+        "date": "2026-08-27",
+        "desc": "Farmácia",
+        "amount": -130,
+        "category": "Farmacia"
+    },
+    {
+        "id": 233,
+        "date": "2026-08-27",
+        "desc": "Carne",
+        "amount": -150,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 234,
+        "date": "2026-08-28",
+        "desc": "Frutas",
+        "amount": -60,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 235,
+        "date": "2026-08-28",
+        "desc": "Terapia",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 236,
+        "date": "2026-08-29",
+        "desc": "Terapia Davi",
+        "amount": -180,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 237,
+        "date": "2026-08-29",
+        "desc": "Água",
+        "amount": -20,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 238,
+        "date": "2026-08-30",
+        "desc": "Padaria",
+        "amount": -60,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 239,
+        "date": "2026-08-30",
+        "desc": "Carne",
+        "amount": -150,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 240,
+        "date": "2026-08-31",
+        "desc": "Aline",
+        "amount": -300,
+        "category": "Pessoal"
+    },
+    {
+        "id": 241,
+        "date": "2026-08-31",
+        "desc": "Terapia",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 242,
+        "date": "2026-08-31",
+        "desc": "Terapia Davi",
+        "amount": -180,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 243,
+        "date": "2026-08-31",
+        "desc": "Plano de Saúde",
+        "amount": -3300,
+        "category": "Plano de Saúde"
+    },
+    {
+        "id": 244,
+        "date": "2026-08-20",
+        "desc": "Despesa do carro",
+        "amount": -2200,
+        "category": "Parcela de Veículo e Manutenção"
+    },
+    {
+        "id": 245,
+        "date": "2026-08-10",
+        "desc": "Energia",
+        "amount": -450,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 246,
+        "date": "2026-08-15",
+        "desc": "Limpeza da piscina",
+        "amount": -200,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 247,
+        "date": "2026-08-25",
+        "desc": "Corte de grama",
+        "amount": -220,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    }
 ];
 
 const DATA_VERSION = 'v6_agosto_completo'
@@ -435,15 +710,71 @@ if (reportMonthSelect) {
 }
 
 const CATEGORY_LIST = [
-    { value: "Saúde", label: "Saúde & Cuidados", color: "#ef4444" },
-    { value: "Alimentação", label: "Alimentação & Mercado", color: "#3b82f6" },
-    { value: "Moradia", label: "Moradia & Habitação", color: "#8b5cf6" },
-    { value: "Educação", label: "Educação & Filhos", color: "#f59e0b" },
-    { value: "Transporte", label: "Transporte & Veículo", color: "#10b981" },
-    { value: "Pessoal", label: "Despesas Pessoais (Aline/Família)", color: "#ec4899" },
-    { value: "Cartão", label: "Cartão de Crédito", color: "#6366f1" },
-    { value: "Lazer", label: "Lazer & Bem-Estar", color: "#14b8a6" },
-    { value: "Outros", label: "Outros", color: "#64748b" }
+    {
+        "value": "Plano de Saúde",
+        "label": "1. Plano de Saúde",
+        "color": "#0284c7"
+    },
+    {
+        "value": "Extra - Consulta e Terapia",
+        "label": "2. Extra - Consulta e Terapia",
+        "color": "#06b6d4"
+    },
+    {
+        "value": "Farmacia",
+        "label": "3. Farmacia",
+        "color": "#ec4899"
+    },
+    {
+        "value": "Alimentação e Mercado",
+        "label": "4. Alimentação e Mercado",
+        "color": "#f97316"
+    },
+    {
+        "value": "Educação",
+        "label": "5. Educação",
+        "color": "#eab308"
+    },
+    {
+        "value": "Parcela de Veículo e Manutenção",
+        "label": "6. Parcela de Veículo e Manutenção",
+        "color": "#10b981"
+    },
+    {
+        "value": "Salario Empregadas",
+        "label": "7. Salario Empregadas",
+        "color": "#8b5cf6"
+    },
+    {
+        "value": "Lazer",
+        "label": "8. Lazer",
+        "color": "#14b8a6"
+    },
+    {
+        "value": "Condominio, Agua, Luz, Pisicina e Jardim",
+        "label": "9. Condominio, Agua, Luz, Pisicina e Jardim",
+        "color": "#6366f1"
+    },
+    {
+        "value": "Restaurante e App",
+        "label": "10. Restaurante e App",
+        "color": "#f43f5e"
+    },
+    {
+        "value": "Pessoal",
+        "label": "11. Despesas Pessoais (Aline/Família)",
+        "color": "#d946ef"
+    },
+    {
+        "value": "Cartão",
+        "label": "12. Cartão de Crédito",
+        "color": "#64748b"
+    },
+    {
+        "value": "Outros",
+        "label": "Outros",
+        "color": "#94a3b8"
+    }
 ];
 
 function renderCategorizeTable() {
