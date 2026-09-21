@@ -780,41 +780,70 @@ const CATEGORY_LIST = [
 function renderCategorizeTable() {
     const tbody = document.getElementById("categorize-table-body");
     const counter = document.getElementById("classify-counter");
+    const totalEl = document.getElementById("classify-total-value");
+    const searchInput = document.getElementById("search-expense-input");
+    const catFilter = document.getElementById("filter-category-select");
     if (!tbody) return;
 
+    if (catFilter && catFilter.options.length <= 1) {
+        catFilter.innerHTML = "<option value=\"all\">Todas as Categorias</option>";
+        CATEGORY_LIST.forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = cat.value;
+            opt.textContent = cat.label;
+            catFilter.appendChild(opt);
+        });
+    }
+
+    const searchTerm = (searchInput ? searchInput.value : "").trim().toLowerCase();
+    const selectedFilterCat = catFilter ? catFilter.value : "all";
+
     tbody.innerHTML = "";
-    const expenses = transactions.filter(t => t.amount < 0);
-    if (counter) counter.innerText = expenses.length + " Despesas Cadastradas";
+    let expenses = transactions.filter(t => t.amount < 0);
+
+    if (selectedFilterCat !== "all") {
+        expenses = expenses.filter(t => t.category === selectedFilterCat);
+    }
+    if (searchTerm) {
+        expenses = expenses.filter(t => (t.desc && t.desc.toLowerCase().includes(searchTerm)) || (t.amount && Math.abs(t.amount).toString().includes(searchTerm)));
+    }
+
+    const totalSum = expenses.reduce((acc, t) => acc + Math.abs(t.amount), 0);
+
+    if (counter) counter.innerText = expenses.length + " Despesas Listadas";
+    if (totalEl) totalEl.innerText = "Total: R$ " + totalSum.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+
+    if (expenses.length === 0) {
+        tbody.innerHTML = "<tr><td colspan=\"5\" style=\"text-align: center; padding: 25px; color: #94a3b8; font-size: 0.95rem;\"><i class=\"fas fa-search\" style=\"font-size: 1.3rem; display: block; margin-bottom: 8px;\"></i>Nenhuma despesa encontrada com os filtros selecionados.</td></tr>";
+        return;
+    }
 
     expenses.forEach((t) => {
         const tr = document.createElement("tr");
         tr.style.borderBottom = "1px solid #e2e8f0";
 
-        // Cores e rótulo amigável da categoria atual
         const catObj = CATEGORY_LIST.find(c => c.value === t.category) || { label: t.category, color: "#64748b" };
 
         let optionsHtml = "";
         CATEGORY_LIST.forEach(cat => {
             const isSelected = cat.value === t.category ? "selected" : "";
-            optionsHtml += `<option value="${cat.value}" ${isSelected}>${cat.label}</option>`;
+            optionsHtml += "<option value=\"" + cat.value + "\" " + isSelected + ">" + cat.label + "</option>";
         });
 
-        tr.innerHTML = `
-            <td style="padding: 12px 14px; color: #64748b; font-size: 0.85rem;">${t.date ? formatDateBr(t.date) : "Sem data"}</td>
-            <td style="padding: 12px 14px; font-weight: 600; color: #1e293b;">${t.desc}</td>
-            <td style="padding: 12px 14px; font-weight: 700; color: #ef4444;">R$ ${Math.abs(t.amount).toFixed(2).replace(".", ",")}</td>
-            <td style="padding: 12px 14px;"><span style="background: ${catObj.color}15; color: ${catObj.color}; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.82rem;">${catObj.label}</span></td>
-            <td style="padding: 12px 14px;">
-                <select data-id="${t.id}" class="category-change-select" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 500; font-size: 0.88rem; width: 100%; cursor: pointer; background: var(--card-bg, #ffffff); color: var(--text-color);">
-                    ${optionsHtml}
-                </select>
-            </td>
-        `;
+        tr.innerHTML = "\n" +
+            "<td style=\"padding: 12px 14px; color: #64748b; font-size: 0.85rem;\">" + (t.date ? formatDateBr(t.date) : "Sem data") + "</td>\n" +
+            "<td style=\"padding: 12px 14px; font-weight: 600; color: #1e293b;\">" + t.desc + "</td>\n" +
+            "<td style=\"padding: 12px 14px; font-weight: 700; color: #ef4444;\">R$ " + Math.abs(t.amount).toFixed(2).replace(".", ",") + "</td>\n" +
+            "<td style=\"padding: 12px 14px;\"><span style=\"background: " + catObj.color + "15; color: " + catObj.color + "; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.82rem; border: 1px solid " + catObj.color + "30;\">" + catObj.label + "</span></td>\n" +
+            "<td style=\"padding: 12px 14px;\">\n" +
+            "    <select data-id=\"" + t.id + "\" class=\"category-change-select\" title=\"Altere a categoria desta despesa\" style=\"padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 600; font-size: 0.85rem; width: 100%; cursor: pointer; background: var(--card-bg, #ffffff); color: var(--text-color);\">\n" +
+            "        " + optionsHtml + "\n" +
+            "    </select>\n" +
+            "</td>";
         tbody.appendChild(tr);
     });
 
-    // Event listener para atualizar categoria em tempo real
-    document.querySelectorAll(".category-change-select").forEach(sel => {
+    tbody.querySelectorAll(".category-change-select").forEach(sel => {
         sel.addEventListener("change", function() {
             const id = parseInt(this.getAttribute("data-id"));
             const newCat = this.value;
@@ -826,8 +855,6 @@ function renderCategorizeTable() {
                 updateCharts();
                 if (typeof updateDynamicMonthlyReport === "function") updateDynamicMonthlyReport();
                 renderCategorizeTable();
-
-renderCategorizeTable();
             }
         });
     });
