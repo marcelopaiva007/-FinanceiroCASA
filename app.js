@@ -77,9 +77,9 @@ const defaultAugustTransactions = [
     {
         "id": 210,
         "date": "2026-08-10",
-        "desc": "Cartão de Crédito",
+        "desc": "Compras do Mês / Consumo da Casa",
         "amount": -2450,
-        "category": "Cartão"
+        "category": "Alimentação e Mercado"
     },
     {
         "id": 211,
@@ -114,7 +114,7 @@ const defaultAugustTransactions = [
         "date": "2026-08-14",
         "desc": "Aline",
         "amount": -500,
-        "category": "Pessoal"
+        "category": "Salario Empregadas"
     },
     {
         "id": 216,
@@ -163,7 +163,7 @@ const defaultAugustTransactions = [
         "date": "2026-08-18",
         "desc": "Aline",
         "amount": -400,
-        "category": "Pessoal"
+        "category": "Salario Empregadas"
     },
     {
         "id": 223,
@@ -212,7 +212,7 @@ const defaultAugustTransactions = [
         "date": "2026-08-24",
         "desc": "Aline",
         "amount": -400,
-        "category": "Pessoal"
+        "category": "Salario Empregadas"
     },
     {
         "id": 230,
@@ -289,7 +289,7 @@ const defaultAugustTransactions = [
         "date": "2026-08-31",
         "desc": "Aline",
         "amount": -300,
-        "category": "Pessoal"
+        "category": "Salario Empregadas"
     },
     {
         "id": 241,
@@ -742,7 +742,7 @@ const CATEGORY_LIST = [
     },
     {
         "value": "Salario Empregadas",
-        "label": "7. Salario Empregadas",
+        "label": "7. Salario Empregadas (Aline / Nete / Faxina)",
         "color": "#8b5cf6"
     },
     {
@@ -762,7 +762,7 @@ const CATEGORY_LIST = [
     },
     {
         "value": "Pessoal",
-        "label": "11. Despesas Pessoais (Aline/Família)",
+        "label": "11. Despesas Pessoais & Família",
         "color": "#d946ef"
     },
     {
