@@ -685,6 +685,7 @@ renderCategorizeTable();
 
 function init() {
     populateCategoryDropdowns();
+    renderCategorySwitches();
     renderCategoriesManagement();
     populateMonthYearSelectors();
     if(list) list.innerHTML = '';
@@ -847,22 +848,196 @@ if (btnDownloadPdfInner) {
 }
 
 
+
+// ==========================================
+// SIMULADOR INTERATIVO DE CORTE ORÇAMENTÁRIO (META: 30%)
+// ==========================================
+
+// Padrão inicial: Plano de Saúde e Educação são Intocáveis por padrão; as demais são Cortáveis
+const DEFAULT_CUTTABLE_CATEGORIES = {
+    "Plano de Saúde": false, // Intocável por padrão
+    "Educação": false,       // Intocável por padrão
+    "Extra - Consulta e Terapia": true,
+    "Farmacia": true,
+    "Alimentação e Mercado": true,
+    "Parcela de Veículo e Manutenção": true,
+    "Salario Empregadas": true,
+    "Lazer": true,
+    "Condominio, Agua, Luz, Pisicina e Jardim": true,
+    "Restaurante e App": true,
+    "Pessoal": true,
+    "TAXAS, JUROS, IMPOSTOS E ETC.": true,
+    "Outros": true
+};
+
+let cuttableSettings = {};
+try {
+    const saved = localStorage.getItem("cuttable_categories_settings");
+    if (saved) {
+        cuttableSettings = JSON.parse(saved);
+    } else {
+        cuttableSettings = { ...DEFAULT_CUTTABLE_CATEGORIES };
+        localStorage.setItem("cuttable_categories_settings", JSON.stringify(cuttableSettings));
+    }
+} catch (e) {
+    cuttableSettings = { ...DEFAULT_CUTTABLE_CATEGORIES };
+}
+
+function saveCuttableSettings() {
+    localStorage.setItem("cuttable_categories_settings", JSON.stringify(cuttableSettings));
+    updateDynamicMonthlyReport();
+}
+
+function resetCuttableSettingsToDefault() {
+    cuttableSettings = { ...DEFAULT_CUTTABLE_CATEGORIES };
+    saveCuttableSettings();
+    showAutoSaveToast("Seleção restaurada para o padrão (Educação e Plano de Saúde blindados)!");
+}
+
+function renderCategorySwitches() {
+    const container = document.getElementById("category-switches-container");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    // Obter todas as categorias existentes
+    const activeCats = customCategories.map(c => c.value);
+    activeCats.forEach(catName => {
+        if (cuttableSettings[catName] === undefined) {
+            cuttableSettings[catName] = true;
+        }
+    });
+
+    activeCats.forEach((catName, idx) => {
+        const isCuttable = cuttableSettings[catName] !== false;
+        const catObj = customCategories.find(c => c.value === catName) || { color: "#64748b" };
+
+        const div = document.createElement("div");
+        div.style.cssText = `background: ${isCuttable ? "#ffffff" : "#f8fafc"}; border: 2px solid ${isCuttable ? "#10b981" : "#cbd5e1"}; padding: 10px 14px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.2s;`;
+
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: ${catObj.color};"></span>
+                <span style="font-size: 0.88rem; font-weight: 700; color: ${isCuttable ? "#1e293b" : "#64748b"};">${idx + 1}. ${catName}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.75rem; font-weight: 700; padding: 3px 8px; border-radius: 12px; background: ${isCuttable ? "#dcfce7" : "#f1f5f9"}; color: ${isCuttable ? "#166534" : "#64748b"};">
+                    ${isCuttable ? "Pode Cortar" : "Intocável"}
+                </span>
+                <input type="checkbox" ${isCuttable ? "checked" : ""} style="cursor: pointer; width: 18px; height: 18px; accent-color: #10b981;">
+            </div>
+        `;
+
+        const chk = div.querySelector("input[type='checkbox']");
+        const toggle = () => {
+            cuttableSettings[catName] = !cuttableSettings[catName];
+            saveCuttableSettings();
+            renderCategorySwitches();
+        };
+
+        div.onclick = (e) => {
+            if (e.target !== chk) {
+                chk.checked = !chk.checked;
+            }
+            toggle();
+        };
+
+        container.appendChild(div);
+    });
+}
+
 function updateDynamicMonthlyReport() {
     const monthSelect = document.getElementById("report-month-select");
     const selectedMonth = monthSelect ? monthSelect.value : currentSelectedPeriod;
 
+    // 1. Filtrar despesas pelo mês selecionado
     let filteredTxs = transactions.filter(t => t.amount < 0);
     if (selectedMonth && selectedMonth !== "all") {
         filteredTxs = filteredTxs.filter(t => t.date && t.date.startsWith(selectedMonth));
     }
 
-    const totalExp = filteredTxs.reduce((sum, t) => sum + Math.abs(t.amount), 0);
-    const cutMeta = totalExp * 0.30;
-    const targetExp = totalExp * 0.70;
+    // 2. Calcular totais por categoria
+    const catTotals = {};
+    filteredTxs.forEach(t => {
+        catTotals[t.category] = (catTotals[t.category] || 0) + Math.abs(t.amount);
+    });
 
+    const totalHomeExp = filteredTxs.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    const globalCutMeta = totalHomeExp * 0.30; // 30% do total da casa
+    const targetHomeExp = totalHomeExp * 0.70;
+
+    // 3. Separar categorias Cortáveis vs Intocáveis
+    let cuttableBaseTotal = 0;
+    let untouchableBaseTotal = 0;
+    let cuttableCount = 0;
+    let untouchableCount = 0;
+
+    Object.keys(catTotals).forEach(cat => {
+        const val = catTotals[cat];
+        if (cuttableSettings[cat] !== false) {
+            cuttableBaseTotal += val;
+            cuttableCount++;
+        } else {
+            untouchableBaseTotal += val;
+            untouchableCount++;
+        }
+    });
+
+    // 4. Calcular taxa de esforço necessária sobre a base cortável para atingir os 30% da casa
+    let effortPct = 0;
+    let isFeasible = true;
+
+    if (cuttableBaseTotal > 0) {
+        effortPct = (globalCutMeta / cuttableBaseTotal) * 100;
+        if (effortPct > 100) {
+            isFeasible = false;
+        }
+    } else {
+        effortPct = 0;
+        isFeasible = false;
+    }
+
+    // 5. Atualizar Indicadores do Simulador no DOM
+    const simTotal = document.getElementById("sim-total-home");
+    const simTargetCut = document.getElementById("sim-target-cut-amount");
+    const simCuttableBase = document.getElementById("sim-cuttable-base");
+    const simCuttableCount = document.getElementById("sim-cuttable-count");
+    const simUntouchableBase = document.getElementById("sim-untouchable-base");
+    const simUntouchableCount = document.getElementById("sim-untouchable-count");
+    const simEffortPct = document.getElementById("sim-effort-pct");
+    const simFeasibilityBadge = document.getElementById("cut-feasibility-badge");
+
+    if (simTotal) simTotal.innerText = `R$ ${totalHomeExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (simTargetCut) simTargetCut.innerText = `R$ ${globalCutMeta.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (simCuttableBase) simCuttableBase.innerText = `R$ ${cuttableBaseTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (simCuttableCount) simCuttableCount.innerText = `${cuttableCount} Categorias Cortáveis`;
+    if (simUntouchableBase) simUntouchableBase.innerText = `R$ ${untouchableBaseTotal.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (simUntouchableCount) simUntouchableCount.innerText = `${untouchableCount} Categorias Blindadas`;
+
+    if (simEffortPct) {
+        simEffortPct.innerText = `${effortPct.toFixed(2)}%`;
+        simEffortPct.style.color = isFeasible ? "#1e40af" : "#ef4444";
+    }
+
+    if (simFeasibilityBadge) {
+        if (isFeasible) {
+            simFeasibilityBadge.innerText = `Meta Atingível com Sucesso (${effortPct.toFixed(1)}% de corte nos itens marcados)`;
+            simFeasibilityBadge.style.background = "#dcfce7";
+            simFeasibilityBadge.style.color = "#166534";
+            simFeasibilityBadge.style.border = "1px solid #bbf7d0";
+        } else {
+            simFeasibilityBadge.innerText = `Atenção: Base cortável insuficiente para os 30% da casa! Marque mais categorias.`;
+            simFeasibilityBadge.style.background = "#fee2e2";
+            simFeasibilityBadge.style.color = "#991b1b";
+            simFeasibilityBadge.style.border = "1px solid #fecaca";
+        }
+    }
+
+    // 6. Atualizar Cards Executivos do Relatório PDF
     const periodEl = document.getElementById("dyn-report-period");
     const totalEl = document.getElementById("dyn-report-total");
     const cutEl = document.getElementById("dyn-report-cut");
+    const cutDescEl = document.getElementById("dyn-report-cut-desc");
     const targetEl = document.getElementById("dyn-report-target");
     const argTotalEl = document.getElementById("dyn-arg-total");
 
@@ -876,11 +1051,85 @@ function updateDynamicMonthlyReport() {
     };
 
     if (periodEl) periodEl.innerText = "Base de Dados: " + (monthNames[selectedMonth] || selectedMonth);
-    if (totalEl) totalEl.innerText = "R$ " + totalExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (cutEl) cutEl.innerText = "R$ " + cutMeta.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (targetEl) targetEl.innerText = "R$ " + targetExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    if (argTotalEl) argTotalEl.innerText = "R$ " + totalExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (totalEl) totalEl.innerText = "R$ " + totalHomeExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (cutEl) cutEl.innerText = "R$ " + globalCutMeta.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (cutDescEl) cutDescEl.innerText = `Alocada nas ${cuttableCount} categorias marcadas como cortáveis`;
+    if (targetEl) targetEl.innerText = "R$ " + targetHomeExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (argTotalEl) argTotalEl.innerText = "R$ " + totalHomeExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    // 7. Renderizar a Tabela Detalhada com base na seleção
+    const tbody = document.getElementById("interactive-cut-table-body");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+
+    const sortedCats = Object.keys(catTotals).sort((a, b) => catTotals[b] - catTotals[a]);
+
+    sortedCats.forEach(catName => {
+        const val = catTotals[catName];
+        const isCuttable = cuttableSettings[catName] !== false;
+        const catObj = customCategories.find(c => c.value === catName) || { color: "#64748b", desc: "" };
+
+        let itemCutAmount = 0;
+        let itemNewCeiling = val;
+
+        if (isCuttable && cuttableBaseTotal > 0) {
+            // Distribuição proporcional da meta de 30% da casa
+            itemCutAmount = val * (effortPct / 100);
+            if (itemCutAmount > val) itemCutAmount = val;
+            itemNewCeiling = val - itemCutAmount;
+        }
+
+        const tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid #e2e8f0";
+        tr.style.background = isCuttable ? "#fff" : "#f8fafc";
+
+        tr.innerHTML = `
+            <td style="padding: 12px 14px;">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.78rem; background: ${isCuttable ? "#dcfce7" : "#f1f5f9"}; color: ${isCuttable ? "#166534" : "#64748b"}; border: 1px solid ${isCuttable ? "#bbf7d0" : "#e2e8f0"};">
+                    <i class="fas fa-${isCuttable ? "check" : "lock"}"></i> ${isCuttable ? "Cortável" : "Intocável"}
+                </span>
+            </td>
+            <td style="padding: 12px 14px; font-weight: 700; color: ${catObj.color};">
+                ${catName}
+            </td>
+            <td style="padding: 12px 14px; font-weight: 600; color: ${isCuttable ? "#ef4444" : "#1e293b"};">
+                R$ ${val.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td style="padding: 12px 14px; font-weight: 700; color: #0284c7;">
+                R$ ${itemNewCeiling.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td style="padding: 12px 14px; font-weight: 700; color: ${isCuttable ? "#059669" : "#64748b"};">
+                ${isCuttable ? "- R$ " + itemCutAmount.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ` (${effortPct.toFixed(1)}%)` : "R$ 0,00 (0%)"}
+            </td>
+            <td style="padding: 12px 14px; font-size: 0.82rem; color: #475569;">
+                ${isCuttable
+                    ? `Aplicar contenção proporcional de ${effortPct.toFixed(1)}% eliminando despesas excedentes e renegociando valores.`
+                    : `<strong>Conta Blindada:</strong> 100% preservada sem nenhum corte no orçamento da família.`}
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+
+    // Linha de totalizador final na tabela
+    const trTotal = document.createElement("tr");
+    trTotal.style.background = "#f1f5f9";
+    trTotal.style.fontWeight = "800";
+    trTotal.style.fontSize = "0.95rem";
+    trTotal.style.borderTop = "2px solid #cbd5e1";
+
+    trTotal.innerHTML = `
+        <td style="padding: 14px; text-transform: uppercase; color: #0f172a;">TOTAL GERAL</td>
+        <td style="padding: 14px; color: #0284c7;">100% das Despesas</td>
+        <td style="padding: 14px; color: #ef4444;">R$ ${totalHomeExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td style="padding: 14px; color: #0284c7;">R$ ${targetHomeExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td style="padding: 14px; color: #059669;">R$ ${globalCutMeta.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (30,00%)</td>
+        <td style="padding: 14px; color: #059669;">Meta de 30% da casa absorvida pelos custos cortáveis selecionados.</td>
+    `;
+    tbody.appendChild(trTotal);
 }
+
 
 
 // Sincronização dos Seletores de Mês e Ano
@@ -1090,6 +1339,7 @@ function saveCategories() {
     localStorage.setItem("custom_categories", JSON.stringify(customCategories));
     CATEGORY_LIST = customCategories;
     populateCategoryDropdowns();
+    renderCategorySwitches();
     renderCategoriesManagement();
     updateCharts();
     if (typeof renderCategorizeTable === "function") renderCategorizeTable();
@@ -1432,3 +1682,8 @@ function setupTransactionEventListeners() {
 }
 
 setupTransactionEventListeners();
+
+const btnResetCut = document.getElementById("btn-reset-cut-selection");
+if (btnResetCut) {
+    btnResetCut.addEventListener("click", resetCuttableSettingsToDefault);
+}
