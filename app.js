@@ -11,28 +11,54 @@ const money_minus = document.getElementById('total-expense');
 
 
 const defaultAugustTransactions = [
-    { id: 201, date: "2026-08-01", desc: "Unimed", amount: -1500.00, category: "Saúde" },
-    { id: 202, date: "2026-08-02", desc: "Escola", amount: -1200.00, category: "Outros" },
-    { id: 203, date: "2026-08-03", desc: "Polo", amount: -850.00, category: "Transporte" },
-    { id: 204, date: "2026-08-04", desc: "VIVO", amount: -250.00, category: "Moradia" },
-    { id: 205, date: "2026-08-05", desc: "Dra. Fábia", amount: -500.00, category: "Saúde" },
-    { id: 206, date: "2026-08-06", desc: "Água e Luz", amount: -420.00, category: "Moradia" },
-    { id: 207, date: "2026-08-07", desc: "Gasolina", amount: -400.00, category: "Transporte" },
-    { id: 208, date: "2026-08-08", desc: "Dra. Roberta", amount: -350.00, category: "Saúde" },
-    { id: 209, date: "2026-08-09", desc: "Mercado", amount: -1800.00, category: "Alimentação" },
-    { id: 210, date: "2026-08-10", desc: "Cartão de Crédito", amount: -2450.00, category: "Outros" },
-    { id: 211, date: "2026-08-11", desc: "Farmácia", amount: -180.00, category: "Saúde" },
-    { id: 212, date: "2026-08-12", desc: "Academia", amount: -160.00, category: "Lazer" },
-    { id: 101, date: "2026-08-01", desc: "Receita / Salário", amount: 12000.00, category: "Receita" }
+    { id: 201, date: '2026-08-01', desc: 'Unimed', amount: -1500.00, category: 'Saúde' },
+    { id: 202, date: '2026-08-02', desc: 'Escola', amount: -1200.00, category: 'Outros' },
+    { id: 203, date: '2026-08-03', desc: 'Polo', amount: -850.00, category: 'Transporte' },
+    { id: 204, date: '2026-08-04', desc: 'VIVO', amount: -250.00, category: 'Moradia' },
+    { id: 205, date: '2026-08-05', desc: 'Dra. Fábia', amount: -500.00, category: 'Saúde' },
+    { id: 206, date: '2026-08-06', desc: 'Água e Luz', amount: -420.00, category: 'Moradia' },
+    { id: 207, date: '2026-08-07', desc: 'Gasolina', amount: -400.00, category: 'Transporte' },
+    { id: 208, date: '2026-08-08', desc: 'Dra. Roberta', amount: -350.00, category: 'Saúde' },
+    { id: 209, date: '2026-08-09', desc: 'Mercado', amount: -1800.00, category: 'Alimentação' },
+    { id: 210, date: '2026-08-10', desc: 'Cartão de Crédito', amount: -2450.00, category: 'Outros' },
+    { id: 211, date: '2026-08-11', desc: 'Farmácia', amount: -180.00, category: 'Saúde' },
+    { id: 212, date: '2026-08-12', desc: 'Academia', amount: -160.00, category: 'Lazer' },
+    { id: 213, date: '2026-08-13', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
+    { id: 214, date: '2026-08-13', desc: 'Faxina baía', amount: -200.00, category: 'Moradia' },
+    { id: 215, date: '2026-08-14', desc: 'Aline', amount: -500.00, category: 'Outros' },
+    { id: 216, date: '2026-08-14', desc: 'Davi', amount: -100.00, category: 'Outros' },
+    { id: 217, date: '2026-08-15', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
+    { id: 218, date: '2026-08-15', desc: 'Carne', amount: -100.00, category: 'Alimentação' },
+    { id: 219, date: '2026-08-16', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
+    { id: 220, date: '2026-08-16', desc: 'Água', amount: -20.00, category: 'Moradia' },
+    { id: 221, date: '2026-08-17', desc: 'Condomínio', amount: -700.00, category: 'Moradia' },
+    { id: 222, date: '2026-08-18', desc: 'Aline', amount: -400.00, category: 'Outros' },
+    { id: 223, date: '2026-08-18', desc: 'Frutas', amount: -50.00, category: 'Alimentação' },
+    { id: 224, date: '2026-08-19', desc: 'Carne', amount: -200.00, category: 'Alimentação' },
+    { id: 225, date: '2026-08-20', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
+    { id: 226, date: '2026-08-21', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
+    { id: 227, date: '2026-08-22', desc: 'Padaria', amount: -60.00, category: 'Alimentação' },
+    { id: 228, date: '2026-08-23', desc: 'Escola', amount: -20.00, category: 'Outros' },
+    { id: 229, date: '2026-08-24', desc: 'Aline', amount: -400.00, category: 'Outros' },
+    { id: 230, date: '2026-08-25', desc: 'Frutas', amount: -50.00, category: 'Alimentação' },
+    { id: 231, date: '2026-08-26', desc: 'Futsal', amount: -110.00, category: 'Lazer' },
+    { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 15000.00, category: 'Receita' }
 ];
 
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-
-const hasAugustExpenses = transactions.some(t => t.date && t.date.startsWith('2026-08'));
-if (!hasAugustExpenses) {
-    transactions = [...defaultAugustTransactions, ...transactions];
-    localStorage.setItem('transactions', JSON.stringify(transactions));
+let transactions = defaultAugustTransactions;
+try {
+    const saved = localStorage.getItem('transactions');
+    if (saved) {
+        const parsed = JSON.parse(saved);
+        // Junta evitando duplicatas por id
+        const existingIds = new Set(parsed.map(t => t.id));
+        const toAdd = defaultAugustTransactions.filter(t => !existingIds.has(t.id));
+        transactions = [...parsed, ...toAdd];
+    }
+} catch (e) {
+    transactions = defaultAugustTransactions;
 }
+localStorage.setItem('transactions', JSON.stringify(transactions));
 
 
 function formatDateBr(dateString) {
