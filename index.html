@@ -14,6 +14,7 @@
         <h2><i class="fas fa-chart-pie"></i> BI Financeiro</h2>
         <ul>
             <li id="tab-overview" class="active" style="cursor:pointer"><i class="fas fa-home"></i> Visão Geral</li>
+            <li id="tab-categorize" style="cursor:pointer"><i class="fas fa-tags"></i> Classificar Despesas</li>
             <li id="tab-transactions" style="cursor:pointer"><i class="fas fa-wallet"></i> Transações</li>
             <li id="tab-goals" style="cursor:pointer"><i class="fas fa-chart-line"></i> Plano de Corte (30%)</li>
         </ul>
@@ -77,11 +78,14 @@
                         <div class="form-group">
                             <label for="category">Categoria</label>
                             <select id="category" required>
-                                <option value="Moradia">Moradia</option>
-                                <option value="Alimentação">Alimentação</option>
-                                <option value="Transporte">Transporte</option>
-                                <option value="Saúde">Saúde</option>
-                                <option value="Lazer">Lazer</option>
+                                <option value="Saúde">Saúde & Cuidados</option>
+                                <option value="Alimentação">Alimentação & Mercado</option>
+                                <option value="Moradia">Moradia & Habitação</option>
+                                <option value="Educação">Educação & Filhos</option>
+                                <option value="Transporte">Transporte & Veículo</option>
+                                <option value="Pessoal">Despesas Pessoais (Aline/Família)</option>
+                                <option value="Cartão">Cartão de Crédito</option>
+                                <option value="Lazer">Lazer & Bem-Estar</option>
                                 <option value="Outros">Outros</option>
                             </select>
                         </div>
@@ -98,6 +102,85 @@
                 </div>
             </div>
         </div>
+
+        
+        <!-- TELA NOVA: CLASSIFICAÇÃO DE DESPESAS POR CATEGORIA -->
+        <div id="view-categorize" class="view-section" style="display: none; padding-top: 20px;">
+            <!-- PLANO DE CATEGORIAS EXPLICATIVO -->
+            <div class="card" style="margin-bottom: 25px; border-left: 5px solid #3b82f6; display: block;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 8px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-sitemap" style="color: #3b82f6;"></i> Plano Oficial de Categorias & Áreas de Despesas
+                </h3>
+                <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 16px;">
+                    Estrutura formal recomendada para alocar cada gasto da casa sem distorções nos relatórios:
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #ef4444;"><i class="fas fa-heartbeat"></i> 1. Saúde & Cuidados</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Plano de Saúde, Unimed, Terapias (Marcelo/Davi), Consultas Médicas e Farmácia.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #3b82f6;"><i class="fas fa-utensils"></i> 2. Alimentação & Mercado</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Supermercado, Açougue/Carnes, Feira/Frutas e Padaria.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #8b5cf6;"><i class="fas fa-home"></i> 3. Moradia & Habitação</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Condomínio, Água, Luz, Internet/VIVO e Faxina da casa.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #f59e0b;"><i class="fas fa-graduation-cap"></i> 4. Educação & Filhos</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Mensalidade escolar, materiais e despesas exclusivas do Davi.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #10b981;"><i class="fas fa-car"></i> 5. Transporte & Veículo</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Combustível (Gasolina) e Parcela/Manutenção do Polo.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #ec4899;"><i class="fas fa-user"></i> 6. Despesas Pessoais & Família</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Retiradas da Aline, mesadas e gastos pessoais avulsos.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #6366f1;"><i class="fas fa-credit-card"></i> 7. Cartão de Crédito</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Fatura principal do cartão e compras parceladas.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #14b8a6;"><i class="fas fa-futbol"></i> 8. Lazer & Bem-Estar</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Futsal, Academia e atividades de recreação familiar.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA INTERATIVA DE CLASSIFICAÇÃO -->
+            <div class="card" style="display: block;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                    <div>
+                        <h3 style="font-size: 1.25rem; color: #111827; margin-bottom: 4px;">Classificador Interativo de Despesas</h3>
+                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Selecione a categoria correta para cada despesa da lista. O sistema atualiza o dashboard e os relatórios na hora.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span id="classify-counter" style="background: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">0 Despesas</span>
+                    </div>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+                        <thead>
+                            <tr style="background: #f1f5f9; color: #1e293b; border-bottom: 2px solid #cbd5e1;">
+                                <th style="padding: 12px 14px;">Data</th>
+                                <th style="padding: 12px 14px;">Descrição da Despesa</th>
+                                <th style="padding: 12px 14px;">Valor (R$)</th>
+                                <th style="padding: 12px 14px;">Categoria Atual</th>
+                                <th style="padding: 12px 14px; min-width: 220px;">Alterar para Categoria Correta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categorize-table-body">
+                            <!-- Inserido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
 
         <div id="view-transactions" class="view-section" style="display: none; padding-top: 20px;">
             <div class="card">

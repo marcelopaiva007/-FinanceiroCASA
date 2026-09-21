@@ -122,6 +122,20 @@ function updateCharts() {
 
     const ctx1El = document.getElementById('categoryChart');
     if(ctx1El) {
+        const categoryColorMap = {
+            "Saúde": "#ef4444",
+            "Alimentação": "#3b82f6",
+            "Moradia": "#8b5cf6",
+            "Educação": "#f59e0b",
+            "Transporte": "#10b981",
+            "Pessoal": "#ec4899",
+            "Cartão": "#6366f1",
+            "Lazer": "#14b8a6",
+            "Outros": "#64748b"
+        };
+        const chartLabels = Object.keys(catTotals);
+        const chartColors = chartLabels.map(l => categoryColorMap[l] || "#94a3b8");
+
         const ctx1 = ctx1El.getContext('2d');
         if(catChartInstance) catChartInstance.destroy();
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -133,7 +147,7 @@ function updateCharts() {
                 labels: Object.keys(catTotals), 
                 datasets: [{ 
                     data: Object.values(catTotals), 
-                    backgroundColor: ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6', '#64748b'], 
+                    backgroundColor: chartColors, 
                     borderWidth: 2,
                     borderColor: isDark ? '#1e293b' : '#ffffff'
                 }] 
@@ -212,6 +226,7 @@ function addTransaction(e) {
     transactions.push(t);
     localStorage.setItem('transactions', JSON.stringify(transactions));
     init();
+renderCategorizeTable();
     desc.value = ''; amount.value = '';
 }
 
@@ -412,4 +427,70 @@ function updateDynamicMonthlyReport() {
 const reportMonthSelect = document.getElementById("report-month-select");
 if (reportMonthSelect) {
     reportMonthSelect.addEventListener("change", updateDynamicMonthlyReport);
+}
+
+const CATEGORY_LIST = [
+    { value: "Saúde", label: "Saúde & Cuidados", color: "#ef4444" },
+    { value: "Alimentação", label: "Alimentação & Mercado", color: "#3b82f6" },
+    { value: "Moradia", label: "Moradia & Habitação", color: "#8b5cf6" },
+    { value: "Educação", label: "Educação & Filhos", color: "#f59e0b" },
+    { value: "Transporte", label: "Transporte & Veículo", color: "#10b981" },
+    { value: "Pessoal", label: "Despesas Pessoais (Aline/Família)", color: "#ec4899" },
+    { value: "Cartão", label: "Cartão de Crédito", color: "#6366f1" },
+    { value: "Lazer", label: "Lazer & Bem-Estar", color: "#14b8a6" },
+    { value: "Outros", label: "Outros", color: "#64748b" }
+];
+
+function renderCategorizeTable() {
+    const tbody = document.getElementById("categorize-table-body");
+    const counter = document.getElementById("classify-counter");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    const expenses = transactions.filter(t => t.amount < 0);
+    if (counter) counter.innerText = expenses.length + " Despesas Cadastradas";
+
+    expenses.forEach((t) => {
+        const tr = document.createElement("tr");
+        tr.style.borderBottom = "1px solid #e2e8f0";
+
+        // Cores e rótulo amigável da categoria atual
+        const catObj = CATEGORY_LIST.find(c => c.value === t.category) || { label: t.category, color: "#64748b" };
+
+        let optionsHtml = "";
+        CATEGORY_LIST.forEach(cat => {
+            const isSelected = cat.value === t.category ? "selected" : "";
+            optionsHtml += "<option value="" + cat.value + "" " + isSelected + ">" + cat.label + "</option>";
+        });
+
+        tr.innerHTML = "
+            <td style="padding: 12px 14px; color: #64748b; font-size: 0.85rem;">" + (t.date ? formatDateBr(t.date) : "Sem data") + "</td>
+            <td style="padding: 12px 14px; font-weight: 600; color: #1e293b;">" + t.desc + "</td>
+            <td style="padding: 12px 14px; font-weight: 700; color: #ef4444;">R$ " + Math.abs(t.amount).toFixed(2).replace(".", ",") + "</td>
+            <td style="padding: 12px 14px;"><span style="background: " + catObj.color + "15; color: " + catObj.color + "; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.82rem;">" + catObj.label + "</span></td>
+            <td style="padding: 12px 14px;">
+                <select data-id="" + t.id + "" class="category-change-select" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 500; font-size: 0.88rem; width: 100%; cursor: pointer; background: var(--card-bg, #ffffff); color: var(--text-color);">
+                    " + optionsHtml + "
+                </select>
+            </td>
+        ";
+        tbody.appendChild(tr);
+    });
+
+    // Event listener para atualizar categoria em tempo real
+    document.querySelectorAll(".category-change-select").forEach(sel => {
+        sel.addEventListener("change", function() {
+            const id = parseInt(this.getAttribute("data-id"));
+            const newCat = this.value;
+            const targetTx = transactions.find(item => item.id === id);
+            if (targetTx) {
+                targetTx.category = newCat;
+                localStorage.setItem("transactions", JSON.stringify(transactions));
+                updateValues();
+                updateCharts();
+                if (typeof updateDynamicMonthlyReport === "function") updateDynamicMonthlyReport();
+                renderCategorizeTable();
+            }
+        });
+    });
 }
