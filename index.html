@@ -12,7 +12,7 @@
 <body>
     <div class="sidebar">
         <h2><i class="fas fa-chart-pie"></i> BI Financeiro</h2>
-        <div style="padding: 4px 12px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #3b82f6;"><i class="fas fa-code-branch"></i> <span class="sys-version-badge">Versão 3.1</span></div>
+        <div style="padding: 4px 12px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #3b82f6;"><i class="fas fa-code-branch"></i> <span class="sys-version-badge">Versão 3.2</span></div>
         <ul>
             <li id="tab-overview" class="active" style="cursor:pointer"><i class="fas fa-home"></i> Visão Geral</li>
             <li id="tab-categories" style="cursor:pointer"><i class="fas fa-sitemap"></i> Categorias de Despesas</li>
@@ -24,7 +24,7 @@
     <div class="main-content">
                 <header style="position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
             <div>
-                <h1>Despesas do Mês <span style="font-size: 0.85rem; font-weight: 700; vertical-align: middle; background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 12px; margin-left: 8px; letter-spacing: 0.5px;">v3.1 Mensal & Anual</span></h1>
+                <h1>Despesas do Mês <span style="font-size: 0.85rem; font-weight: 700; vertical-align: middle; background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 12px; margin-left: 8px; letter-spacing: 0.5px;">v3.2 Mensal & Anual</span></h1>
                 <p>Acompanhamento inteligente do orçamento doméstico por Mês e Ano &bull; <span style="color: #0284c7; font-weight: 600;">Visão Mensal & Consolidada</span></p>
             </div>
             
@@ -183,7 +183,7 @@
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
                             <h3 style="font-size: 1.25rem; color: #111827; margin: 0;">Conferência & Alteração de Todas as Despesas</h3>
-                            <span style="background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Versão do Sistema: v3.1</span>
+                            <span style="background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Versão do Sistema: v3.2</span>
                         </div>
                         <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Confira cada lançamento da casa e altere a categoria de qualquer despesa diretamente no menu suspenso abaixo. Todas as alterações são salvas automaticamente e atualizam os gráficos e o plano de corte na hora.</p>
                     </div>
@@ -235,243 +235,225 @@
             </div>
         </div>
 
-                <div id="view-goals" class="view-section" style="display: none; padding-top: 20px;">
+                
+        <div id="view-goals" class="view-section" style="display: none; padding-top: 20px;">
             <!-- SELETOR DE MES RECORRENTE -->
             <div style="background: var(--card-bg, #ffffff); border-radius: 12px; padding: 18px 24px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: var(--shadow);">
                 <div style="display: flex; align-items: center; gap: 12px;">
-                    <i class="fas fa-calendar-alt" style="font-size: 1.4rem; color: #ef4444;"></i>
+                    <i class="fas fa-bullseye" style="font-size: 1.5rem; color: #ef4444;"></i>
                     <div>
-                        <strong style="font-size: 1rem; color: var(--text-color);">Mês de Referência do Relatório:</strong>
-                        <p style="font-size: 0.85rem; color: #64748b; margin: 0;">Gera automaticamente o diagnóstico de corte de 30% para qualquer mês</p>
+                        <h3 style="margin: 0; font-size: 1.15rem; color: #1e293b;">Plano de Corte Familiar &bull; Redução de 30%</h3>
+                        <p style="margin: 3px 0 0 0; font-size: 0.85rem; color: #64748b;">Estratégia prática e estruturada para apresentar à família e equilibrar as contas sem perder qualidade de vida.</p>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <select id="report-month-select" style="width: auto; padding: 10px 16px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; font-size: 0.95rem; cursor: pointer;">
-                        <option value="all">Consolidado Geral / Todo o Período</option>
-                        <option value="2026-08" selected>Agosto / 2026</option>
-                        <option value="2026-09">Setembro / 2026</option>
-                        <option value="2026-10">Outubro / 2026</option>
-                        <option value="2026-11">Novembro / 2026</option>
-                        <option value="2026-12">Dezembro / 2026</option>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <select id="report-month-select" style="padding: 8px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-weight: 600; font-size: 0.9rem; background: #f8fafc; color: #0284c7; cursor: pointer; outline: none;">
+                        <!-- Preenchido dinamicamente via JS -->
                     </select>
-                    <button id="btn-download-pdf-inner" class="btn" style="width: auto; padding: 10px 20px; background: #ef4444; display: flex; align-items: center; gap: 8px; font-size: 0.95rem;"><i class="fas fa-file-pdf"></i> Baixar PDF do Mês</button>
+                    <button id="btn-download-pdf-inner" style="background: #ef4444; color: #ffffff; border: none; padding: 9px 16px; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-file-pdf"></i> Baixar Relatório em PDF
+                    </button>
                 </div>
             </div>
 
-            
-            <!-- CONTAINER PARA EXPORTAÇÃO EM PDF (DETALHADO E CONVINCENTE) -->
-            <div id="report-pdf-container" style="background: var(--card-bg, #ffffff); border-radius: 12px; padding: 35px; box-shadow: var(--shadow); color: var(--text-color); line-height: 1.6;">
-                
-                <!-- CABEÇALHO FORMAL -->
-                <div style="border-bottom: 3px solid #ef4444; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <!-- RELATÓRIO EXECUTIVO FORMATADO PARA APRESENTAÇÃO E IMPRESSÃO EM PDF -->
+            <div id="report-pdf-container" class="card" style="display: block; padding: 35px 30px; background: #ffffff; color: #1e293b;">
+                <!-- CABEÇALHO DO RELATÓRIO -->
+                <div style="border-bottom: 2px solid #0284c7; padding-bottom: 18px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;">
                     <div>
-                        <span style="font-size: 0.85rem; font-weight: 700; color: #ef4444; text-transform: uppercase; letter-spacing: 1px;">Documento de Planejamento Familiar</span>
-                        <h2 style="font-size: 1.8rem; color: #111827; margin: 4px 0 6px 0;">Plano Diretor de Reestruturação Financeira e Meta de 30%</h2>
-                        <p style="color: #64748b; font-size: 0.95rem; margin: 0;">Diagnóstico analítico, auditoria de contas e redistribuição orçamentária sustentável</p>
+                        <span style="background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">Planejamento Orçamentário Familiar</span>
+                        <h2 style="font-size: 1.7rem; color: #0f172a; margin: 8px 0 4px 0;">Plano Estratégico de Redução de Despesas (Meta: -30%)</h2>
+                        <p style="color: #64748b; font-size: 0.95rem; margin: 0;">Diagnóstico detalhado das contas da casa, plano de ação conta a conta e metas de economia.</p>
                     </div>
                     <div style="text-align: right;">
-                        <span style="background: #fee2e2; color: #991b1b; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">STATUS: REVISÃO URGENTE</span>
-                        <p id="dyn-report-period" style="font-size: 0.85rem; color: #64748b; margin-top: 6px; font-weight: 600;">Base de Dados: Agosto/2026</p>
+                        <div id="dyn-report-period" style="font-size: 0.9rem; font-weight: 700; color: #0284c7;">Base de Dados: Agosto de 2026 (Auditado)</div>
+                        <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 3px;">Versão do Sistema: v3.2 &bull; Atualizado</div>
                     </div>
                 </div>
 
-                <!-- CARDS DE METRICAS PRINCIPAIS -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 25px;">
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid #ef4444; padding: 18px; border-radius: 10px;">
-                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Despesas Totais Apuradas</span>
-                        <h3 id="dyn-report-total" style="font-size: 1.7rem; color: #ef4444; margin: 6px 0 2px 0;">R$ 19.510,00</h3>
-                        <small style="color: #64748b;">Gasto real consolidado no mês</small>
+                <!-- QUADRO RESUMO EXECUTIVO COM OS 3 GRANDES NÚMEROS -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 30px;">
+                    <div style="background: #fef2f2; border: 1px solid #fee2e2; border-left: 5px solid #ef4444; padding: 16px; border-radius: 10px;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #991b1b; text-transform: uppercase;">Total Atual Consolidado</span>
+                        <h3 id="dyn-report-total" style="font-size: 1.6rem; color: #991b1b; margin: 6px 0 0 0;">R$ 19.534,59</h3>
+                        <span style="font-size: 0.75rem; color: #7f1d1d;">Mês de Agosto (55 despesas auditadas)</span>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid #f59e0b; padding: 18px; border-radius: 10px;">
-                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Meta de Redução (30%)</span>
-                        <h3 id="dyn-report-cut" style="font-size: 1.7rem; color: #d97706; margin: 6px 0 2px 0;">R$ 5.853,00</h3>
-                        <small style="color: #059669; font-weight: 600;">Valor a ser poupado todo mês</small>
+                    <div style="background: #f0fdf4; border: 1px solid #dcfce7; border-left: 5px solid #10b981; padding: 16px; border-radius: 10px;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #166534; text-transform: uppercase;">Meta de Economia Mensal (-30%)</span>
+                        <h3 id="dyn-report-cut" style="font-size: 1.6rem; color: #166534; margin: 6px 0 0 0;">R$ 5.860,38</h3>
+                        <span style="font-size: 0.75rem; color: #14532d;">Alívio direto no caixa mensal</span>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-left: 5px solid #10b981; padding: 18px; border-radius: 10px;">
-                        <span style="font-size: 0.8rem; color: #64748b; text-transform: uppercase; font-weight: 600;">Novo Teto Mensal Sustentável</span>
-                        <h3 id="dyn-report-target" style="font-size: 1.7rem; color: #059669; margin: 6px 0 2px 0;">R$ 13.657,00</h3>
-                        <small style="color: #64748b;">Orçamento blindado e viável</small>
+                    <div style="background: #eff6ff; border: 1px solid #dbeafe; border-left: 5px solid #3b82f6; padding: 16px; border-radius: 10px;">
+                        <span style="font-size: 0.8rem; font-weight: 700; color: #1e40af; text-transform: uppercase;">Novo Teto Orçamentário (70%)</span>
+                        <h3 id="dyn-report-target" style="font-size: 1.6rem; color: #1e40af; margin: 6px 0 0 0;">R$ 13.674,21</h3>
+                        <span style="font-size: 0.75rem; color: #1e3a8a;">Equilíbrio e segurança da família</span>
                     </div>
                 </div>
 
-                <!-- 1. INTRODUÇÃO E DIRETRIZES DA REUNIÃO -->
-                <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 5px solid #f59e0b; padding: 22px; border-radius: 10px; margin-bottom: 25px;">
-                    <h4 style="color: #92400e; font-size: 1.15rem; margin: 0 0 10px 0; display: flex; align-items: center; gap: 10px;">
-                        <i class="fas fa-heart"></i> Mensagem para o Casal: Por que e como faremos essa adequação?
-                    </h4>
-                    <p style="color: #78350f; font-size: 0.95rem; margin: 0 0 10px 0;">
-                        No período apurado, nossas despesas alcançaram <strong id="dyn-arg-total">R$ 19.510,00</strong>. Esse valor está consumindo integralmente os recursos da casa e nos deixando desprotegidos diante de qualquer imprevisto. 
+                <!-- 1. TEXTO DE INTRODUÇÃO E ALINHAMENTO COM A ESPOSA -->
+                <div style="background: #fffbeb; border: 1px solid #fef3c7; border-left: 5px solid #f59e0b; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <h4 style="color: #92400e; font-size: 1.05rem; margin: 0 0 8px 0;"><i class="fas fa-heart"></i> Mensagem Central para a Conversa Familiar</h4>
+                    <p style="color: #78350f; font-size: 0.95rem; line-height: 1.6; margin: 0 0 10px 0;">
+                        No mês apurado, os gastos da casa atingiram <strong id="dyn-arg-total">R$ 19.534,59</strong>. Esse montante compromete a segurança financeira familiar e nos impede de construir reservas para o futuro.
                     </p>
-                    <p style="color: #78350f; font-size: 0.95rem; margin: 0;">
-                        <strong>O princípio central deste plano:</strong> Não vamos diminuir a qualidade de vida nem cortar a educação e o bem-estar dos nossos filhos. O foco é estancar sangrias invisíveis: <strong>duplicidades contratuais de saúde</strong>, compras desordenadas no supermercado e faturas de cartão de crédito sem limite prévio estabelecido.
+                    <p style="color: #78350f; font-size: 0.95rem; line-height: 1.6; margin: 0;">
+                        <strong>O compromisso fundamental deste plano:</strong> Não abriremos mão do que é essencial para o desenvolvimento e conforto dos nossos filhos — <strong>Educação (R$ 2.020,00) e Plano de Saúde (R$ 3.300,00) permanecem 100% intactos</strong>. O corte de 30% concentra-se exclusivamente em excessos que podem ser reorganizados: centralização de compras de mercado, controle de horas e diárias extras domésticas, e aproveitamento de reembolsos do plano de saúde para terapias.
                     </p>
                 </div>
 
-                <!-- 2. DIAGNÓSTICO PROFUNDO POR MACROÁREAS -->
-                <h3 style="font-size: 1.25rem; color: #1e293b; margin: 30px 0 15px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">1. Auditoria e Diagnóstico das Despesas Atuais</h3>
+                <!-- 2. DIAGNÓSTICO DAS PRINCIPAIS ÁREAS DE GASTO -->
+                <h3 style="font-size: 1.25rem; color: #1e293b; margin: 30px 0 15px 0; border-left: 4px solid #3b82f6; padding-left: 10px;">
+                    1. Auditoria e Diagnóstico das Despesas de Agosto
+                </h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 30px;">
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px;">
-                        <h4 style="color: #ef4444; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-stethoscope"></i> Saúde & Convênios (R$ 8.330,00 - 42,7%)</h4>
-                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">É o maior gargalo. Há pagamento duplo de convênio médico (R$ 3.300 + R$ 1.500) e 7 sessões de terapia pagas à parte somando R$ 2.370, além de consultas avulsas de R$ 850.</p>
+                        <h4 style="color: #8b5cf6; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-broom"></i> Serviços Domésticos (R$ 3.720,00 - 19,0%)</h4>
+                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Maior volume financeiro do mês: salário de Nete (R$ 1.620,00), pagamentos frequentes de Aline (R$ 1.900,00 fracionados) e diárias extras de faxina de praia (R$ 200,00).</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px;">
-                        <h4 style="color: #f59e0b; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-credit-card"></i> Cartão & Retiradas (R$ 4.150,00 - 21,3%)</h4>
-                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">A fatura do cartão consumiu R$ 2.450 sem categorização prévia, somada a 4 saques/transferências de R$ 1.600 sem destino unificado.</p>
+                        <h4 style="color: #0284c7; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-heartbeat"></i> Saúde, Terapias e Convênio (R$ 5.160,00 - 26,4%)</h4>
+                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Plano de Saúde fixo familiar de R$ 3.300,00 somado a 7 sessões de terapia particulares pagas à parte (R$ 1.860,00 entre Jessika e Davi).</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px;">
-                        <h4 style="color: #3b82f6; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-shopping-cart"></i> Alimentação Global (R$ 2.680,00 - 13,7%)</h4>
-                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">O supermercado principal custou R$ 1.800, mas compras periféricas de açougue (R$ 600), feira (R$ 160) e padaria (R$ 120) elevaram o custo sem planejamento de cardápio.</p>
+                        <h4 style="color: #f97316; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-shopping-cart"></i> Alimentação Global (R$ 3.244,59 - 16,6%)</h4>
+                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Mercado principal Bem Mais (R$ 1.280,00) e Atacarejo (R$ 740,00), além de 11 compras periféricas picadas de carnes (R$ 610,00), sacolão/frutas (R$ 564,59) e padaria.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 18px; border-radius: 8px;">
-                        <h4 style="color: #10b981; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-home"></i> Moradia, Educação e Carro (R$ 4.350,00 - 22,3%)</h4>
-                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Custos estruturais básicos: Escola (R$ 1.220), Condomínio (R$ 700), Parcela/Manutenção Polo (R$ 850), Água/Luz (R$ 420) e Combustível (R$ 400).</p>
+                        <h4 style="color: #10b981; font-size: 1rem; margin: 0 0 8px 0;"><i class="fas fa-home"></i> Carro, Casa e Educação (R$ 5.950,00 - 30,5%)</h4>
+                        <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Parcela/manutenção do carro (R$ 2.200,00), escola e assessoria do Davi (R$ 2.020,00), condomínio (R$ 750,00), energia (R$ 450,00), piscina e jardim (R$ 400,00) e água (R$ 30,00).</p>
                     </div>
                 </div>
 
-                <!-- 3. PLANO DETALHADO CONTA POR CONTA (TABELA COMPLETA) -->
-                <h3 style="font-size: 1.25rem; color: #1e293b; margin: 30px 0 15px 0; border-left: 4px solid #ef4444; padding-left: 10px;">2. Tabela Detalhada: De Onde Sai Cada Real da Economia</h3>
+                <!-- 3. TABELA DETALHADA CONTA POR CONTA -->
+                <h3 style="font-size: 1.25rem; color: #1e293b; margin: 30px 0 15px 0; border-left: 4px solid #ef4444; padding-left: 10px;">
+                    2. Tabela Detalhada: De Onde Sai Cada Real da Economia de 30%
+                </h3>
                 <div style="overflow-x: auto; margin-bottom: 30px;">
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
                         <thead>
                             <tr style="background: #f1f5f9; color: #1e293b; border-bottom: 2px solid #cbd5e1;">
-                                <th style="padding: 12px 14px;">Despesa / Item</th>
+                                <th style="padding: 12px 14px;">Área / Despesa</th>
                                 <th style="padding: 12px 14px;">Gasto Atual</th>
                                 <th style="padding: 12px 14px;">Novo Teto</th>
-                                <th style="padding: 12px 14px; color: #059669;">Economia</th>
-                                <th style="padding: 12px 14px;">Estratégia e Ação Imediata</th>
+                                <th style="padding: 12px 14px; color: #059669;">Economia (-30%)</th>
+                                <th style="padding: 12px 14px;">Estratégia e Plano Prático</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- SAUDE -->
+                            <!-- SERVIÇOS DOMÉSTICOS -->
                             <tr style="border-bottom: 1px solid #e2e8f0; background: #fff5f5;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Unimed (Duplicidade com Plano)</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 1.500,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 0,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 1.500,00</td>
-                                <td style="padding: 12px 14px; color: #475569;"><strong>Cancelar a Unimed:</strong> Já possuímos o Plano de Saúde principal de R$ 3.300,00. Pagar dois planos é jogar R$ 1.500 fora todo mês.</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Salário Empregada & Diárias (Aline, Nete, Praia)</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 3.720,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 2.420,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 1.300,00</td>
+                                <td style="padding: 12px 14px; color: #475569;">Manter o salário fixo de Nete (R$ 1.620) e estabelecer um teto fixo mensal para Aline de R$ 800,00, eliminando saques e diárias extras sem agendamento prévio.</td>
                             </tr>
+                            <!-- ALIMENTAÇÃO E MERCADO -->
                             <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Terapias (Adulto & Davi)</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 2.370,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.500,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 870,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Foram 7 sessões particulares no mês (R$ 330 e R$ 180 cada). Negociar pacote mensal com desconto ou solicitar reembolso pelo plano de saúde.</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Alimentação, Supermercado, Carnes & Frutas</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 3.244,59</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 2.144,59</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 1.100,00</td>
+                                <td style="padding: 12px 14px; color: #475569;">Concentrar as compras em atacarejo com lista fechada mensal e definir teto semanal de R$ 150,00 para carnes, frutas e feira (evitando idas repetidas).</td>
                             </tr>
+                            <!-- EXTRA - TERAPIAS E CONSULTAS -->
                             <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Consultas Médicas (Dra. Fábia / Dra. Roberta)</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 850,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 500,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 350,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Priorizar a rede credenciada do plano de saúde de R$ 3.300 para consultas de rotina, evitando consultas 100% particulares sem reembolso.</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Extra - Terapias Particulares (Jessika e Davi)</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 1.860,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.060,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 800,00</td>
+                                <td style="padding: 12px 14px; color: #475569;">Dar entrada nos pedidos de reembolso integral ou parcial junto ao Plano de Saúde de R$ 3.300 ou negociar pacote mensal com desconto com os profissionais.</td>
                             </tr>
-                            <!-- CARTAO E RETIRADAS -->
+                            <!-- DESPESAS PESSOAIS E AVULSAS -->
                             <tr style="border-bottom: 1px solid #e2e8f0; background: #fffbeb;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Fatura do Cartão de Crédito</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 2.450,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.200,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 1.250,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Travar compras impulsivas e parcelamentos. Estabelecer teto rígido de R$ 300,00 por semana em compras no cartão.</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0; background: #fffbeb;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Retiradas Pessoais em Conta (Aline)</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 1.600,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.000,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 600,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Fixar uma transferência única de mesada/gastos livres de R$ 1.000,00 no dia 1º de cada mês, eliminando retiradas picadas sem controle.</td>
-                            </tr>
-                            <!-- ALIMENTACAO -->
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Mercado Principal</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 1.800,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.300,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Despesas Pessoais, Compras Avulsas & Fotos</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 840,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 340,00</td>
                                 <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 500,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Fazer compra mensal única em atacarejo com lista pré-definida de itens básicos, evitando compras fracionadas de alto custo.</td>
+                                <td style="padding: 12px 14px; color: #475569;">Suspender compras pontuais de conveniência em lojas de departamento e limitar gastos discricionários familiares a um teto mensal estipulado.</td>
                             </tr>
+                            <!-- CONDOMÍNIO, LUZ, PISCINA E JARDIM -->
                             <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Carnes, Açougue & Padaria</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 880,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 580,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 300,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Foram 5 compras repetidas de carne e padaria. Planejar porcionamento semanal de proteínas (teto de R$ 145/semana).</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Condomínio, Energia Elétrica, Piscina e Jardim</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 1.730,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.330,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 400,00</td>
+                                <td style="padding: 12px 14px; color: #475569;">Ajustar hábitos de consumo de energia (ar-condicionado e bombas) e readequar a periodicidade da manutenção de piscina/jardim em pacote unificado.</td>
                             </tr>
-                            <!-- TRANSPORTE E CONTAS -->
+                            <!-- PARCELA DO CARRO E COMBUSTÍVEL -->
                             <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Combustível (Gasolina)</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 400,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 300,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 100,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Otimizar deslocamentos e caronas conjuntas para a escola e atividades semanais.</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Parcela de Veículo, Gasolina e Manutenção</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 2.200,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 1.800,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 400,00</td>
+                                <td style="padding: 12px 14px; color: #475569;">Otimizar deslocamentos urbanos para a escola e atividades semanais, reduzindo abastecimentos excedentes e manutenções corretivas.</td>
                             </tr>
+                            <!-- FARMÁCIA, LAZER E RESTAURANTES -->
                             <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Telefonia/Internet (VIVO)</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 250,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 150,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 100,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Ligar para a operadora e adequar ao plano de fidelidade/combo atualizado com mensalidade reduzida.</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Farmácia, Lazer & Restaurantes</td>
+                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 620,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 360,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 260,00</td>
+                                <td style="padding: 12px 14px; color: #475569;">Aproveitar descontos de PBM do plano de saúde em medicamentos e priorizar opções gastronômicas em família planejadas com antecedência.</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #e2e8f0;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Farmácia & Medicamentos</td>
-                                <td style="padding: 12px 14px; color: #ef4444; font-weight: 600;">R$ 310,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 170,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #059669;">R$ 140,00</td>
-                                <td style="padding: 12px 14px; color: #475569;">Utilizar programas de benefício de farmácia (PBM) dos planos de saúde e optar por medicamentos genéricos.</td>
-                            </tr>
-                            <!-- INTOCAVEIS -->
+                            <!-- CONTAS INTOCÁVEIS (EDUCAÇÃO E PLANO DE SAÚDE) -->
                             <tr style="border-bottom: 1px solid #e2e8f0; background: #f8fafc;">
-                                <td style="padding: 12px 14px; font-weight: 700;">Escola, Condomínio, Polo, Faxina</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 7.530,00</td>
-                                <td style="padding: 12px 14px; font-weight: 600;">R$ 7.530,00</td>
-                                <td style="padding: 12px 14px; font-weight: 700; color: #64748b;">R$ 0,00</td>
-                                <td style="padding: 12px 14px; color: #059669; font-weight: 600;"><strong>Contas Essenciais e Fixas:</strong> 100% mantidas sem nenhum corte para preservar a estabilidade da família.</td>
+                                <td style="padding: 12px 14px; font-weight: 700;">Educação (Davi) & Plano de Saúde Familiar</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 5.320,00</td>
+                                <td style="padding: 12px 14px; font-weight: 600;">R$ 5.320,00</td>
+                                <td style="padding: 12px 14px; font-weight: 700; color: #64748b;">R$ 0,00 (0%)</td>
+                                <td style="padding: 12px 14px; color: #059669; font-weight: 600;"><strong>Contas Essenciais e Intocáveis:</strong> 100% preservadas para garantir a saúde e os estudos dos nossos filhos sem restrições.</td>
                             </tr>
-                            <!-- TOTALIZADOR -->
+                            <!-- TOTAL CONSOLIDADO -->
                             <tr style="background: #f1f5f9; font-weight: 800; font-size: 1.05rem; border-top: 2px solid #cbd5e1;">
-                                <td style="padding: 16px 14px;">TOTAL CONSOLIDADO</td>
-                                <td style="padding: 16px 14px; color: #ef4444;">R$ 19.510,00</td>
-                                <td style="padding: 16px 14px; color: #059669;">R$ 13.650,00</td>
-                                <td style="padding: 16px 14px; color: #059669;">R$ 5.860,00 (30,03%)</td>
-                                <td style="padding: 16px 14px; color: #059669;">Meta atingida com segurança e sem aperto desnecessário.</td>
+                                <td style="padding: 16px 14px;">TOTAL CONSOLIDADO (META 30%)</td>
+                                <td style="padding: 16px 14px; color: #ef4444;">R$ 19.534,59</td>
+                                <td style="padding: 16px 14px; color: #059669;">R$ 13.674,21</td>
+                                <td style="padding: 16px 14px; color: #059669;">R$ 5.860,38 (30,00%)</td>
+                                <td style="padding: 16px 14px; color: #059669;">Meta atingida com segurança e sem impacto na qualidade de vida da casa.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- 4. CRONOGRAMA DE TRANSIÇÃO E METAS SEMANAIS -->
-                <h3 style="font-size: 1.25rem; color: #1e293b; margin: 30px 0 15px 0; border-left: 4px solid #10b981; padding-left: 10px;">3. Cronograma Prático: Como Manter o Controle Semana a Semana</h3>
+                <!-- 4. CRONOGRAMA DE TRANSIÇÃO PRÁTICA EM 4 SEMANAS -->
+                <h3 style="font-size: 1.25rem; color: #1e293b; margin: 30px 0 15px 0; border-left: 4px solid #10b981; padding-left: 10px;">
+                    3. Cronograma Prático: O Passo a Passo em 4 Semanas
+                </h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 30px;">
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
-                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 1: Contratos</strong>
-                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Protocolar cancelamento da Unimed duplicada e renegociar o plano da VIVO. Economia imediata garantida de R$ 1.600/mês.</p>
+                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 1: Fixar Diárias Domésticas</strong>
+                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Alinhar os pagamentos mensais de Aline com teto pré-estabelecido de R$ 800/mês, além do salário fixo de Nete.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
-                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 2: Cartão & Pessoal</strong>
-                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Definir a transferência de R$ 1.000 para a conta de Aline e travar o cartão de crédito em R$ 300 semanais.</p>
+                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 2: Reembolsos de Terapias</strong>
+                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Enviar os recibos das sessões de terapia de Davi e Jessika para reembolso no Plano de Saúde da família.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
-                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 3: Alimentação</strong>
-                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Realizar a compra em atacarejo e estipular teto rígido de R$ 145/semana para açougue, frutas e padaria.</p>
+                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 3: Compra Centralizada</strong>
+                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Realizar a grande compra do mês em atacarejo e estabelecer o limite de R$ 150 semanais para compras avulsas de açougue e feira.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid #3b82f6; padding: 16px; border-radius: 8px;">
-                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 4: Auditoria do Mês</strong>
-                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Abrir o aplicativo juntos em 10 minutos para confirmar o cumprimento do teto de R$ 13.650 e celebrar o resultado.</p>
+                        <strong style="color: #1e40af; font-size: 0.95rem;">Semana 4: Auditoria Conjunta</strong>
+                        <p style="font-size: 0.85rem; color: #475569; margin: 8px 0 0 0;">Abrir o aplicativo juntos em 10 minutos para comemorar o cumprimento do teto de R$ 13.674,21 e planejar o mês seguinte.</p>
                     </div>
                 </div>
 
                 <!-- 5. O DESTINO DA ECONOMIA GERADA -->
                 <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 5px solid #10b981; padding: 22px; border-radius: 10px;">
-                    <h4 style="color: #166534; font-size: 1.1rem; margin: 0 0 10px 0;"><i class="fas fa-seedling"></i> O Que Vamos Conquistar com Essa Economia?</h4>
+                    <h4 style="color: #166534; font-size: 1.1rem; margin: 0 0 10px 0;"><i class="fas fa-piggy-bank"></i> O Que Essa Economia Vai Proporcionar para a Nossa Família?</h4>
                     <p style="color: #14532d; font-size: 0.92rem; margin: 0 0 10px 0;">
-                        Ao economizar <strong>R$ 5.860,00 todos os meses</strong>, em 6 meses a família terá acumulado mais de <strong>R$ 35.000,00</strong> em conta.
+                        Ao economizar <strong>R$ 5.860,38 todos os meses</strong>, a família terá acumulado em 6 meses mais de <strong>R$ 35.160,00</strong> em conta de reserva.
                     </p>
                     <ul style="color: #14532d; font-size: 0.9rem; margin: 0; padding-left: 20px; line-height: 1.7;">
-                        <li><strong>Fim da ansiedade e do estresse com faturas inesperadas.</strong></li>
-                        <li><strong>Construção de uma reserva de emergência real para a segurança das crianças.</strong></li>
-                        <li><strong>Recursos garantidos para férias e projetos da família sem precisar recorrer a juros ou dívidas.</strong></li>
+                        <li><strong>Tranquilidade imediata:</strong> Eliminação de surpresas financeiras e aperto no final do mês.</li>
+                        <li><strong>Reserva sólida de segurança:</strong> Proteção financeira para emergências de saúde e imprevistos com os filhos.</li>
+                        <li><strong>Férias e conquistas planejadas:</strong> Recursos livres para viagens e lazer da família sem precisar recorrer a empréstimos.</li>
                     </ul>
                 </div>
-
             </div>
         </div>
+
     </div>
     <script src="app.js"></script>
     <script>

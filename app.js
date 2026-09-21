@@ -845,6 +845,7 @@ if (btnDownloadPdfInner) {
     btnDownloadPdfInner.addEventListener("click", downloadPDFReport);
 }
 
+
 function updateDynamicMonthlyReport() {
     const monthSelect = document.getElementById("report-month-select");
     const selectedMonth = monthSelect ? monthSelect.value : currentSelectedPeriod;
@@ -865,12 +866,12 @@ function updateDynamicMonthlyReport() {
     const argTotalEl = document.getElementById("dyn-arg-total");
 
     const monthNames = {
-        "2026-08": "Agosto/2026",
-        "2026-09": "Setembro/2026",
-        "2026-10": "Outubro/2026",
-        "2026-11": "Novembro/2026",
-        "2026-12": "Dezembro/2026",
-        "all": "Consolidado Geral"
+        "2026-08": "Agosto de 2026 (Auditado)",
+        "2026-09": "Setembro de 2026",
+        "2026-10": "Outubro de 2026",
+        "2026-11": "Novembro de 2026",
+        "2026-12": "Dezembro de 2026",
+        "all": "Consolidado Geral Histórico"
     };
 
     if (periodEl) periodEl.innerText = "Base de Dados: " + (monthNames[selectedMonth] || selectedMonth);
@@ -879,6 +880,7 @@ function updateDynamicMonthlyReport() {
     if (targetEl) targetEl.innerText = "R$ " + targetExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     if (argTotalEl) argTotalEl.innerText = "R$ " + totalExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+
 
 // Sincronização dos Seletores de Mês e Ano
 const globalMonthSelect = document.getElementById('global-month-year-select');
