@@ -11,6 +11,7 @@ const money_minus = document.getElementById('total-expense');
 
 
 const defaultAugustTransactions = [
+    // --- Relatório 1 (Fatura Principal) ---
     { id: 201, date: '2026-08-01', desc: 'Unimed', amount: -1500.00, category: 'Saúde' },
     { id: 202, date: '2026-08-02', desc: 'Escola', amount: -1200.00, category: 'Outros' },
     { id: 203, date: '2026-08-03', desc: 'Polo', amount: -850.00, category: 'Transporte' },
@@ -23,6 +24,8 @@ const defaultAugustTransactions = [
     { id: 210, date: '2026-08-10', desc: 'Cartão de Crédito', amount: -2450.00, category: 'Outros' },
     { id: 211, date: '2026-08-11', desc: 'Farmácia', amount: -180.00, category: 'Saúde' },
     { id: 212, date: '2026-08-12', desc: 'Academia', amount: -160.00, category: 'Lazer' },
+
+    // --- Relatório 2 (Despesas Diárias / Familiares) ---
     { id: 213, date: '2026-08-13', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
     { id: 214, date: '2026-08-13', desc: 'Faxina baía', amount: -200.00, category: 'Moradia' },
     { id: 215, date: '2026-08-14', desc: 'Aline', amount: -500.00, category: 'Outros' },
@@ -42,7 +45,22 @@ const defaultAugustTransactions = [
     { id: 229, date: '2026-08-24', desc: 'Aline', amount: -400.00, category: 'Outros' },
     { id: 230, date: '2026-08-25', desc: 'Frutas', amount: -50.00, category: 'Alimentação' },
     { id: 231, date: '2026-08-26', desc: 'Futsal', amount: -110.00, category: 'Lazer' },
-    { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 15000.00, category: 'Receita' }
+
+    // --- Relatório 3 (Custos Adicionais da Imagem) ---
+    { id: 232, date: '2026-08-27', desc: 'Farmácia', amount: -130.00, category: 'Saúde' },
+    { id: 233, date: '2026-08-27', desc: 'Carne', amount: -150.00, category: 'Alimentação' },
+    { id: 234, date: '2026-08-28', desc: 'Frutas', amount: -60.00, category: 'Alimentação' },
+    { id: 235, date: '2026-08-28', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
+    { id: 236, date: '2026-08-29', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
+    { id: 237, date: '2026-08-29', desc: 'Água', amount: -20.00, category: 'Moradia' },
+    { id: 238, date: '2026-08-30', desc: 'Padaria', amount: -60.00, category: 'Alimentação' },
+    { id: 239, date: '2026-08-30', desc: 'Carne', amount: -150.00, category: 'Alimentação' },
+    { id: 240, date: '2026-08-31', desc: 'Aline', amount: -300.00, category: 'Outros' },
+    { id: 241, date: '2026-08-31', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
+    { id: 242, date: '2026-08-31', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
+
+    // --- Receita Base Consolidada ---
+    { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 18000.00, category: 'Receita' }
 ];
 
 let transactions = defaultAugustTransactions;
@@ -50,7 +68,6 @@ try {
     const saved = localStorage.getItem('transactions');
     if (saved) {
         const parsed = JSON.parse(saved);
-        // Junta evitando duplicatas por id
         const existingIds = new Set(parsed.map(t => t.id));
         const toAdd = defaultAugustTransactions.filter(t => !existingIds.has(t.id));
         transactions = [...parsed, ...toAdd];
