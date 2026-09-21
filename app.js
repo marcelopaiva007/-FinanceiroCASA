@@ -946,6 +946,7 @@ function renderCategorizeTable() {
             optionsHtml += "<option value=\"" + cat.value + "\" " + isSelected + ">" + cat.label + "</option>";
         });
 
+        
         tr.innerHTML = "\n" +
             "<td style=\"padding: 12px 14px; color: #64748b; font-size: 0.85rem;\">" + (t.date ? formatDateBr(t.date) : "Sem data") + "</td>\n" +
             "<td style=\"padding: 12px 14px; font-weight: 600; color: #1e293b;\">" + t.desc + "</td>\n" +
@@ -956,7 +957,65 @@ function renderCategorizeTable() {
             "        " + optionsHtml + "\n" +
             "    </select>\n" +
             "</td>";
+            
+        const tdActions = document.createElement("td");
+        tdActions.style.padding = "12px 14px";
+        tdActions.style.textAlign = "center";
+        tdActions.style.whiteSpace = "nowrap";
+
+        const btnEdit = document.createElement("button");
+        btnEdit.innerHTML = "<i class=\"fas fa-edit\"></i>";
+        btnEdit.style.background = "transparent";
+        btnEdit.style.border = "none";
+        btnEdit.style.color = "#3b82f6";
+        btnEdit.style.cursor = "pointer";
+        btnEdit.style.fontSize = "1.1rem";
+        btnEdit.style.marginRight = "12px";
+        btnEdit.title = "Editar Despesa";
+        btnEdit.onclick = () => {
+            const newDesc = prompt("Descrição da despesa:", t.desc);
+            if (newDesc === null) return;
+            const newDate = prompt("Data (YYYY-MM-DD):", t.date);
+            if (newDate === null) return;
+            const newValStr = prompt("Valor (ex: 150.50):", Math.abs(t.amount));
+            if (newValStr === null) return;
+            const newVal = parseFloat(newValStr.replace(",", "."));
+            if (isNaN(newVal)) {
+                alert("Valor inválido!");
+                return;
+            }
+            t.desc = newDesc.trim();
+            t.date = newDate.trim();
+            t.amount = -Math.abs(newVal);
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+            init();
+        };
+
+        const btnDelete = document.createElement("button");
+        btnDelete.innerHTML = "<i class=\"fas fa-trash-alt\"></i>";
+        btnDelete.style.background = "transparent";
+        btnDelete.style.border = "none";
+        btnDelete.style.color = "#ef4444";
+        btnDelete.style.cursor = "pointer";
+        btnDelete.style.fontSize = "1.1rem";
+        btnDelete.title = "Excluir Despesa";
+        btnDelete.onclick = () => {
+            if (confirm("Tem certeza que deseja excluir a despesa: " + t.desc + "?")) {
+                const idx = transactions.findIndex(tx => tx.id === t.id);
+                if (idx > -1) {
+                    transactions.splice(idx, 1);
+                    localStorage.setItem("transactions", JSON.stringify(transactions));
+                    init();
+                }
+            }
+        };
+
+        tdActions.appendChild(btnEdit);
+        tdActions.appendChild(btnDelete);
+        tr.appendChild(tdActions);
+
         tbody.appendChild(tr);
+
     });
 
     tbody.querySelectorAll(".category-change-select").forEach(sel => {
