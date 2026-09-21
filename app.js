@@ -58,12 +58,16 @@ const defaultAugustTransactions = [
     { id: 240, date: '2026-08-31', desc: 'Aline', amount: -300.00, category: 'Outros' },
     { id: 241, date: '2026-08-31', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
     { id: 242, date: '2026-08-31', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
-    { id: 243, date: '2026-08-31', desc: 'Plano de Saúde', amount: -3300.00, category: 'Saúde' }
+        { id: 243, date: '2026-08-31', desc: 'Plano de Saúde', amount: -3300.00, category: 'Saúde' },
+    { id: 244, date: '2026-08-20', desc: 'Despesa do carro', amount: -2200.00, category: 'Transporte' },
+    { id: 245, date: '2026-08-10', desc: 'Energia', amount: -450.00, category: 'Moradia' },
+    { id: 246, date: '2026-08-15', desc: 'Limpeza da piscina', amount: -200.00, category: 'Moradia' },
+    { id: 247, date: '2026-08-25', desc: 'Corte de grama', amount: -220.00, category: 'Moradia' }
 
 
 ];
 
-const DATA_VERSION = 'v5_despesas_only'
+const DATA_VERSION = 'v6_agosto_completo'
 let transactions = defaultAugustTransactions;
 
 try {
@@ -236,6 +240,7 @@ function init() {
     updateValues();
     updateCharts();
     updateDynamicMonthlyReport();
+    if (typeof renderCategorizeTable === 'function') renderCategorizeTable();
 }
 
 if(form) form.addEventListener('submit', addTransaction);
@@ -460,20 +465,20 @@ function renderCategorizeTable() {
         let optionsHtml = "";
         CATEGORY_LIST.forEach(cat => {
             const isSelected = cat.value === t.category ? "selected" : "";
-            optionsHtml += "<option value="" + cat.value + "" " + isSelected + ">" + cat.label + "</option>";
+            optionsHtml += `<option value="${cat.value}" ${isSelected}>${cat.label}</option>`;
         });
 
-        tr.innerHTML = "
-            <td style="padding: 12px 14px; color: #64748b; font-size: 0.85rem;">" + (t.date ? formatDateBr(t.date) : "Sem data") + "</td>
-            <td style="padding: 12px 14px; font-weight: 600; color: #1e293b;">" + t.desc + "</td>
-            <td style="padding: 12px 14px; font-weight: 700; color: #ef4444;">R$ " + Math.abs(t.amount).toFixed(2).replace(".", ",") + "</td>
-            <td style="padding: 12px 14px;"><span style="background: " + catObj.color + "15; color: " + catObj.color + "; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.82rem;">" + catObj.label + "</span></td>
+        tr.innerHTML = `
+            <td style="padding: 12px 14px; color: #64748b; font-size: 0.85rem;">${t.date ? formatDateBr(t.date) : "Sem data"}</td>
+            <td style="padding: 12px 14px; font-weight: 600; color: #1e293b;">${t.desc}</td>
+            <td style="padding: 12px 14px; font-weight: 700; color: #ef4444;">R$ ${Math.abs(t.amount).toFixed(2).replace(".", ",")}</td>
+            <td style="padding: 12px 14px;"><span style="background: ${catObj.color}15; color: ${catObj.color}; padding: 4px 10px; border-radius: 12px; font-weight: 600; font-size: 0.82rem;">${catObj.label}</span></td>
             <td style="padding: 12px 14px;">
-                <select data-id="" + t.id + "" class="category-change-select" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 500; font-size: 0.88rem; width: 100%; cursor: pointer; background: var(--card-bg, #ffffff); color: var(--text-color);">
-                    " + optionsHtml + "
+                <select data-id="${t.id}" class="category-change-select" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 500; font-size: 0.88rem; width: 100%; cursor: pointer; background: var(--card-bg, #ffffff); color: var(--text-color);">
+                    ${optionsHtml}
                 </select>
             </td>
-        ";
+        `;
         tbody.appendChild(tr);
     });
 
@@ -490,6 +495,8 @@ function renderCategorizeTable() {
                 updateCharts();
                 if (typeof updateDynamicMonthlyReport === "function") updateDynamicMonthlyReport();
                 renderCategorizeTable();
+
+renderCategorizeTable();
             }
         });
     });

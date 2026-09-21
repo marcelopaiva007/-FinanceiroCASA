@@ -430,18 +430,34 @@
     <script src="app.js"></script>
     <script>
         const t1 = document.getElementById('tab-overview');
+        const tCategorize = document.getElementById('tab-categorize');
         const t2 = document.getElementById('tab-transactions');
         const t3 = document.getElementById('tab-goals');
         const v1 = document.getElementById('view-overview');
+        const vCategorize = document.getElementById('view-categorize');
         const v2 = document.getElementById('view-transactions');
         const v3 = document.getElementById('view-goals');
         
         function resetTabs() {
-            t1.classList.remove('active'); t2.classList.remove('active'); t3.classList.remove('active');
-            v1.style.display = 'none'; v2.style.display = 'none'; v3.style.display = 'none';
+            t1.classList.remove('active');
+            if (tCategorize) tCategorize.classList.remove('active');
+            t2.classList.remove('active');
+            t3.classList.remove('active');
+            v1.style.display = 'none';
+            if (vCategorize) vCategorize.style.display = 'none';
+            v2.style.display = 'none';
+            v3.style.display = 'none';
         }
         
         t1.addEventListener('click', () => { resetTabs(); t1.classList.add('active'); v1.style.display = 'block'; });
+        if (tCategorize && vCategorize) {
+            tCategorize.addEventListener('click', () => {
+                resetTabs();
+                tCategorize.classList.add('active');
+                vCategorize.style.display = 'block';
+                if (typeof renderCategorizeTable === 'function') renderCategorizeTable();
+            });
+        }
         t2.addEventListener('click', () => { resetTabs(); t2.classList.add('active'); v2.style.display = 'block'; });
         t3.addEventListener('click', () => { resetTabs(); t3.classList.add('active'); v3.style.display = 'block'; });
     </script>
