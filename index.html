@@ -12,7 +12,7 @@
 <body>
     <div class="sidebar">
         <h2><i class="fas fa-chart-pie"></i> BI Financeiro</h2>
-        <div style="padding: 4px 12px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #3b82f6;"><i class="fas fa-code-branch"></i> <span class="sys-version-badge">Versão 2.9</span></div>
+        <div style="padding: 4px 12px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #3b82f6;"><i class="fas fa-code-branch"></i> <span class="sys-version-badge">Versão 3.0</span></div>
         <ul>
             <li id="tab-overview" class="active" style="cursor:pointer"><i class="fas fa-home"></i> Visão Geral</li>
             <li id="tab-categories" style="cursor:pointer"><i class="fas fa-sitemap"></i> Categorias de Despesas</li>
@@ -24,7 +24,7 @@
     <div class="main-content">
                 <header style="position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
             <div>
-                <h1>Despesas do Mês <span style="font-size: 0.85rem; font-weight: 700; vertical-align: middle; background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 12px; margin-left: 8px; letter-spacing: 0.5px;">v2.9 Mensal & Anual</span></h1>
+                <h1>Despesas do Mês <span style="font-size: 0.85rem; font-weight: 700; vertical-align: middle; background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 12px; margin-left: 8px; letter-spacing: 0.5px;">v3.0 Mensal & Anual</span></h1>
                 <p>Acompanhamento inteligente do orçamento doméstico por Mês e Ano &bull; <span style="color: #0284c7; font-weight: 600;">Visão Mensal & Consolidada</span></p>
             </div>
             
@@ -122,61 +122,55 @@
         </div>
 
         
-        <!-- TELA EXCLUSIVA 1: PLANO OFICIAL DE CATEGORIAS -->
+        
+        <!-- TELA EXCLUSIVA 1: GERENCIAMENTO DINÂMICO DE CATEGORIAS (CADASTRAR, EDITAR, EXCLUIR) -->
         <div id="view-categories" class="view-section" style="display: none; padding-top: 20px;">
-            <!-- PLANO DE CATEGORIAS EXPLICATIVO EM TELA SEPARADA -->
-            <div class="card" style="margin-bottom: 25px; border-left: 5px solid #3b82f6; display: block;">
-                <h3 style="font-size: 1.3rem; margin-bottom: 8px; color: #1e293b; display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-sitemap" style="color: #3b82f6;"></i> Plano Oficial de Categorias & Áreas de Despesas
-                </h3>
-                <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 16px;">
-                    Estrutura formal recomendada para alocar cada gasto da casa sem distorções nos relatórios:
-                </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #0284c7;"><i class="fas fa-file-medical"></i> 1. Plano de Saúde</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Plano de saúde fixo da família e Unimed.</p>
+            <div class="card" style="margin-bottom: 25px; border-left: 5px solid #0284c7; display: block;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 16px;">
+                    <div>
+                        <h3 style="font-size: 1.3rem; margin: 0 0 6px 0; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-sitemap" style="color: #0284c7;"></i> Gestão de Categorias de Despesas
+                        </h3>
+                        <p style="color: #64748b; font-size: 0.92rem; margin: 0;">
+                            Crie novas categorias, personalize cores e edite ou exclua categorias existentes. Todas as mudanças refletem imediatamente nos gráficos e no formulário.
+                        </p>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #06b6d4;"><i class="fas fa-user-md"></i> 2. Extra - Consulta e Terapia</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Terapias (Marcelo e Davi), consultas médicas com Dra. Fábia, Dra. Roberta, etc.</p>
+                    <div>
+                        <span id="categories-count-badge" style="background: #e0f2fe; color: #0369a1; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
+                            12 Categorias Ativas
+                        </span>
                     </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #ec4899;"><i class="fas fa-pills"></i> 3. Farmacia</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Remédios contínuos, farmácias e cuidados pontuais de saúde.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #f97316;"><i class="fas fa-shopping-cart"></i> 4. Alimentação e Mercado</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Supermercado, açougue/carnes, hortifrúti/frutas e padarias.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #eab308;"><i class="fas fa-graduation-cap"></i> 5. Educação</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Mensalidade escolar e despesas educacionais do Davi.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #10b981;"><i class="fas fa-car"></i> 6. Parcela de Veículo e Manutenção</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Parcela do Polo, gasolina/combustível e manutenções do carro.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #8b5cf6;"><i class="fas fa-broom"></i> 7. Salario Empregadas (Aline / Nete)</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Pagamentos de empregadas e diaristas da casa: Aline, Nete, faxina da baía e serviços domésticos.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #14b8a6;"><i class="fas fa-futbol"></i> 8. Lazer</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Futsal, academia, passeios e esportes familiares.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #6366f1;"><i class="fas fa-home"></i> 9. Condominio, Agua, Luz, Pisicina e Jardim</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Taxa de condomínio, conta de energia, água, internet VIVO, limpeza da piscina e corte de grama.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #f43f5e;"><i class="fas fa-utensils"></i> 10. Restaurante e App</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Restaurantes, lanchonetes, iFood e entregas por aplicativo.</p>
-                    </div>
-                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #d946ef;"><i class="fas fa-user"></i> 11. Despesas Pessoais & Família</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Gastos avulsos, compras individuais da família e mesadas.</p>
-                    </div>
+                </div>
+
+                <!-- FORMULÁRIO DE CADASTRO DE NOVA CATEGORIA -->
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px 20px; margin-bottom: 25px;">
+                    <h4 style="margin: 0 0 12px 0; color: #0f172a; font-size: 1rem; display: flex; align-items: center; gap: 6px;">
+                        <i class="fas fa-plus-circle" style="color: #0284c7;"></i> Cadastrar Nova Categoria
+                    </h4>
+                    <form id="form-new-category" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                        <div style="flex: 2; min-width: 200px;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Nome da Categoria</label>
+                            <input type="text" id="new-cat-name" placeholder="Ex: Investimentos, Viagens, Pets..." required style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem; background: #ffffff;">
+                        </div>
+                        <div style="flex: 3; min-width: 220px;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Descrição / Exemplo de Gastos</label>
+                            <input type="text" id="new-cat-desc" placeholder="Breve explicação de quais despesas entram aqui..." style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem; background: #ffffff;">
+                        </div>
+                        <div style="min-width: 80px;">
+                            <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #475569; margin-bottom: 4px;">Cor do Gráfico</label>
+                            <input type="color" id="new-cat-color" value="#0284c7" style="width: 100%; height: 38px; border-radius: 8px; border: 1px solid #cbd5e1; padding: 2px; cursor: pointer; background: #ffffff;">
+                        </div>
+                        <div>
+                            <button type="submit" style="padding: 10px 18px; border-radius: 8px; background: #0284c7; color: #ffffff; border: none; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px; height: 38px;">
+                                <i class="fas fa-plus"></i> Salvar Categoria
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- LISTA DE CARDS INTERATIVOS DE CATEGORIAS -->
+                <div id="categories-cards-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+                    <!-- Gerado dinamicamente via JavaScript -->
                 </div>
             </div>
         </div>
@@ -189,7 +183,7 @@
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
                             <h3 style="font-size: 1.25rem; color: #111827; margin: 0;">Conferência & Alteração de Todas as Despesas</h3>
-                            <span style="background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Versão do Sistema: v2.9</span>
+                            <span style="background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Versão do Sistema: v3.0</span>
                         </div>
                         <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Confira cada lançamento da casa e altere a categoria de qualquer despesa diretamente no menu suspenso abaixo. Todas as alterações são salvas automaticamente e atualizam os gráficos e o plano de corte na hora.</p>
                     </div>
