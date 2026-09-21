@@ -650,7 +650,6 @@ if(exportBtn) {
     });
 }
 
-init();
 
 // --- LOGICA DE IMPORTACAO (OCR E CSV) ---
 const importFile = document.getElementById('import-file');
@@ -1034,3 +1033,5 @@ function renderCategorizeTable() {
         });
     });
 }
+
+init();
