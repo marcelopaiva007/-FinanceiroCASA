@@ -34,13 +34,6 @@
 
         <div id="view-overview" class="view-section">
             <section class="dashboard">
-                <div class="card income">
-                    <div class="card-icon"><i class="fas fa-arrow-up"></i></div>
-                    <div class="card-info">
-                        <h3>Receitas Totais</h3>
-                        <p id="total-income">R$ 0,00</p>
-                    </div>
-                </div>
                 <div class="card expense">
                     <div class="card-icon"><i class="fas fa-arrow-down"></i></div>
                     <div class="card-info">
@@ -48,11 +41,18 @@
                         <p id="total-expense">R$ 0,00</p>
                     </div>
                 </div>
-                <div class="card balance">
-                    <div class="card-icon"><i class="fas fa-wallet"></i></div>
+                <div class="card" style="border-left: 4px solid #f59e0b;">
+                    <div class="card-icon" style="background:#fef3c7; color:#d97706;"><i class="fas fa-calculator"></i></div>
                     <div class="card-info">
-                        <h3>Saldo Atual</h3>
-                        <p id="total-balance">R$ 0,00</p>
+                        <h3>Média por Despesa</h3>
+                        <p id="avg-expense">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card" style="border-left: 4px solid #8b5cf6;">
+                    <div class="card-icon" style="background:#ede9fe; color:#7c3aed;"><i class="fas fa-chart-line"></i></div>
+                    <div class="card-info">
+                        <h3>Maior Despesa</h3>
+                        <p id="max-expense">R$ 0,00</p>
                     </div>
                 </div>
             </section>
@@ -80,7 +80,6 @@
                                 <option value="Transporte">Transporte</option>
                                 <option value="Saúde">Saúde</option>
                                 <option value="Lazer">Lazer</option>
-                                <option value="Receita">Receita / Salário</option>
                                 <option value="Outros">Outros</option>
                             </select>
                         </div>
@@ -92,7 +91,7 @@
                     <div style="height: 250px;"><canvas id="categoryChart"></canvas></div>
                 </div>
                 <div class="card" style="grid-column: span 2;">
-                    <h3>Fluxo de Caixa</h3>
+                    <h3>Evolução Diária das Despesas</h3>
                     <div style="height: 250px;"><canvas id="cashflowChart"></canvas></div>
                 </div>
             </div>

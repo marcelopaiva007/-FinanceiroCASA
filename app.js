@@ -5,9 +5,9 @@ const category = document.getElementById('category');
 const dateEl = document.getElementById('date');
 const list = document.getElementById('list');
 
-const balance = document.getElementById('total-balance');
-const money_plus = document.getElementById('total-income');
 const money_minus = document.getElementById('total-expense');
+const avg_expense = document.getElementById('avg-expense');
+const max_expense = document.getElementById('max-expense');
 
 
 const defaultAugustTransactions = [
@@ -58,13 +58,12 @@ const defaultAugustTransactions = [
     { id: 240, date: '2026-08-31', desc: 'Aline', amount: -300.00, category: 'Outros' },
     { id: 241, date: '2026-08-31', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
     { id: 242, date: '2026-08-31', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
-    { id: 243, date: '2026-08-31', desc: 'Plano de Saúde', amount: -3300.00, category: 'Saúde' },
+    { id: 243, date: '2026-08-31', desc: 'Plano de Saúde', amount: -3300.00, category: 'Saúde' }
 
-    // --- Receita Base Consolidada ---
-    { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 22000.00, category: 'Receita' }
+
 ];
 
-const DATA_VERSION = 'v4_august_full';
+const DATA_VERSION = 'v5_despesas_only'
 let transactions = defaultAugustTransactions;
 
 try {
@@ -101,14 +100,16 @@ function addTransactionDOM(t) {
 }
 
 function updateValues() {
-    const amounts = transactions.map(t => t.amount);
-    const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
-    const income = amounts.filter(item => item > 0).reduce((acc, item) => (acc += item), 0).toFixed(2);
-    const expense = (amounts.filter(item => item < 0).reduce((acc, item) => (acc += item), 0) * -1).toFixed(2);
+    // Sistema exclusivo para despesas: consideramos todos os valores negativos ou convertidos para despesa
+    const expenses = transactions.map(t => Math.abs(t.amount));
+    const totalExp = expenses.reduce((acc, item) => acc + item, 0);
+    const count = expenses.length;
+    const avgExp = count > 0 ? (totalExp / count) : 0;
+    const maxExp = count > 0 ? Math.max(...expenses) : 0;
 
-    if(balance) balance.innerText = `R$ ${total.replace('.', ',')}`;
-    if(money_plus) money_plus.innerText = `R$ ${income.replace('.', ',')}`;
-    if(money_minus) money_minus.innerText = `R$ ${expense.replace('.', ',')}`;
+    if(money_minus) money_minus.innerText = `R$ ${totalExp.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if(avg_expense) avg_expense.innerText = `R$ ${avgExp.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if(max_expense) max_expense.innerText = `R$ ${maxExp.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 let catChartInstance = null;
@@ -136,21 +137,46 @@ function updateCharts() {
     if(ctx2El) {
         const ctx2 = ctx2El.getContext('2d');
         if(cashChartInstance) cashChartInstance.destroy();
-        const totalInc = transactions.filter(t => t.amount > 0).reduce((a, b) => a + b.amount, 0);
-        const totalExp = Math.abs(transactions.filter(t => t.amount < 0).reduce((a, b) => a + b.amount, 0));
+        
+        // Agrupar despesas por dia
+        const dailyTotals = {};
+        transactions.forEach(t => {
+            const d = t.date ? t.date.split('-').slice(1).reverse().join('/') : 'Sem data';
+            dailyTotals[d] = (dailyTotals[d] || 0) + Math.abs(t.amount);
+        });
+
+        const sortedDates = Object.keys(dailyTotals).sort();
+        const sortedValues = sortedDates.map(d => dailyTotals[d]);
+
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const textColor = isDark ? '#f8fafc' : '#334155';
         cashChartInstance = new Chart(ctx2, {
             type: 'bar',
-            data: { labels: ['Receitas', 'Despesas'], datasets: [{ data: [totalInc, totalExp], backgroundColor: ['#10b981', '#ef4444'], borderRadius: 6 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: textColor } }, x: { ticks: { color: textColor } } } }
+            data: { 
+                labels: sortedDates, 
+                datasets: [{ 
+                    label: 'Despesas por Dia (R$)',
+                    data: sortedValues, 
+                    backgroundColor: '#ef4444', 
+                    borderRadius: 4 
+                }] 
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { legend: { display: false } }, 
+                scales: { 
+                    y: { ticks: { color: textColor } }, 
+                    x: { ticks: { color: textColor, maxRotation: 45, minRotation: 45 } } 
+                } 
+            }
         });
     }
 }
 
 function addTransaction(e) {
     e.preventDefault();
-    const t = { id: Math.floor(Math.random() * 100000000), date: dateEl.value || new Date().toISOString().split('T')[0], desc: desc.value, amount: +amount.value, category: category.value };
+    const t = { id: Math.floor(Math.random() * 100000000), date: dateEl.value || new Date().toISOString().split('T')[0], desc: desc.value, amount: -Math.abs(+amount.value), category: category.value };
     transactions.push(t);
     localStorage.setItem('transactions', JSON.stringify(transactions));
     init();
@@ -204,8 +230,7 @@ if(importFile) {
             const reader = new FileReader();
             reader.onload = function(event) {
                 const text = event.target.result;
-                const rows = text.split('
-').slice(1);
+                const rows = text.split(/\r?\n/).slice(1);
                 let added = 0;
                 rows.forEach(row => {
                     const cols = row.split(',');
@@ -264,7 +289,7 @@ if (resetDataBtn) {
     resetDataBtn.addEventListener('click', () => {
         if (confirm('Deseja recarregar todas as despesas consolidadas de Agosto de 2026?')) {
             localStorage.setItem('transactions', JSON.stringify(defaultAugustTransactions));
-            localStorage.setItem('data_version', 'v4_august_full');
+            localStorage.setItem('data_version', 'v5_despesas_only');
             transactions = [...defaultAugustTransactions];
             init();
             alert('Todas as despesas de Agosto de 2026 foram carregadas com sucesso!');
