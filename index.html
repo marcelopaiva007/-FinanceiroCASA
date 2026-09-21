@@ -78,16 +78,20 @@
                         <div class="form-group">
                             <label for="category">Categoria</label>
                             <select id="category" required>
-                                <option value="Saúde">Saúde & Cuidados</option>
-                                <option value="Alimentação">Alimentação & Mercado</option>
-                                <option value="Moradia">Moradia & Habitação</option>
-                                <option value="Educação">Educação & Filhos</option>
-                                <option value="Transporte">Transporte & Veículo</option>
-                                <option value="Pessoal">Despesas Pessoais (Aline/Família)</option>
-                                <option value="Cartão">Cartão de Crédito</option>
-                                <option value="Lazer">Lazer & Bem-Estar</option>
-                                <option value="Outros">Outros</option>
-                            </select>
+                        <option value="Plano de Saúde">1. Plano de Saúde</option>
+                        <option value="Extra - Consulta e Terapia">2. Extra - Consulta e Terapia</option>
+                        <option value="Farmacia">3. Farmacia</option>
+                        <option value="Alimentação e Mercado">4. Alimentação e Mercado</option>
+                        <option value="Educação">5. Educação</option>
+                        <option value="Parcela de Veículo e Manutenção">6. Parcela de Veículo e Manutenção</option>
+                        <option value="Salario Empregadas">7. Salario Empregadas</option>
+                        <option value="Lazer">8. Lazer</option>
+                        <option value="Condominio, Agua, Luz, Pisicina e Jardim">9. Condominio, Agua, Luz, Pisicina e Jardim</option>
+                        <option value="Restaurante e App">10. Restaurante e App</option>
+                        <option value="Pessoal">11. Despesas Pessoais (Aline/Família)</option>
+                        <option value="Cartão">12. Cartão de Crédito</option>
+                        <option value="Outros">Outros</option>
+                    </select>
                         </div>
                         <button type="submit" class="btn">Registrar Transação</button>
                     </form>
@@ -116,36 +120,52 @@
                 </p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #ef4444;"><i class="fas fa-heartbeat"></i> 1. Saúde & Cuidados</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Plano de Saúde, Unimed, Terapias (Marcelo/Davi), Consultas Médicas e Farmácia.</p>
+                        <strong style="color: #0284c7;"><i class="fas fa-file-medical"></i> 1. Plano de Saúde</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Plano de saúde fixo da família e Unimed.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #3b82f6;"><i class="fas fa-utensils"></i> 2. Alimentação & Mercado</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Supermercado, Açougue/Carnes, Feira/Frutas e Padaria.</p>
+                        <strong style="color: #06b6d4;"><i class="fas fa-user-md"></i> 2. Extra - Consulta e Terapia</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Terapias (Marcelo e Davi), consultas médicas com Dra. Fábia, Dra. Roberta, etc.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #8b5cf6;"><i class="fas fa-home"></i> 3. Moradia & Habitação</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Condomínio, Água, Luz, Internet/VIVO e Faxina da casa.</p>
+                        <strong style="color: #ec4899;"><i class="fas fa-pills"></i> 3. Farmacia</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Remédios contínuos, farmácias e cuidados pontuais de saúde.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #f59e0b;"><i class="fas fa-graduation-cap"></i> 4. Educação & Filhos</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Mensalidade escolar, materiais e despesas exclusivas do Davi.</p>
+                        <strong style="color: #f97316;"><i class="fas fa-shopping-cart"></i> 4. Alimentação e Mercado</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Supermercado, açougue/carnes, hortifrúti/frutas e padarias.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #10b981;"><i class="fas fa-car"></i> 5. Transporte & Veículo</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Combustível (Gasolina) e Parcela/Manutenção do Polo.</p>
+                        <strong style="color: #eab308;"><i class="fas fa-graduation-cap"></i> 5. Educação</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Mensalidade escolar e despesas educacionais do Davi.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #ec4899;"><i class="fas fa-user"></i> 6. Despesas Pessoais & Família</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Retiradas da Aline, mesadas e gastos pessoais avulsos.</p>
+                        <strong style="color: #10b981;"><i class="fas fa-car"></i> 6. Parcela de Veículo e Manutenção</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Parcela do Polo, gasolina/combustível e manutenções do carro.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #6366f1;"><i class="fas fa-credit-card"></i> 7. Cartão de Crédito</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Fatura principal do cartão e compras parceladas.</p>
+                        <strong style="color: #8b5cf6;"><i class="fas fa-broom"></i> 7. Salario Empregadas</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Diaristas, faxina da baía/casa e serviços domésticos.</p>
                     </div>
                     <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
-                        <strong style="color: #14b8a6;"><i class="fas fa-futbol"></i> 8. Lazer & Bem-Estar</strong>
-                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Futsal, Academia e atividades de recreação familiar.</p>
+                        <strong style="color: #14b8a6;"><i class="fas fa-futbol"></i> 8. Lazer</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Futsal, academia, passeios e esportes familiares.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #6366f1;"><i class="fas fa-home"></i> 9. Condominio, Agua, Luz, Pisicina e Jardim</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Taxa de condomínio, conta de energia, água, internet VIVO, limpeza da piscina e corte de grama.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #f43f5e;"><i class="fas fa-utensils"></i> 10. Restaurante e App</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Restaurantes, lanchonetes, iFood e entregas por aplicativo.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #d946ef;"><i class="fas fa-user"></i> 11. Despesas Pessoais & Família</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Retiradas e repasses da Aline, mesadas e despesas pessoais.</p>
+                    </div>
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 8px;">
+                        <strong style="color: #64748b;"><i class="fas fa-credit-card"></i> 12. Cartão de Crédito</strong>
+                        <p style="font-size: 0.83rem; color: #64748b; margin: 5px 0 0 0;">Fatura do cartão de crédito da casa.</p>
                     </div>
                 </div>
             </div>
