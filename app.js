@@ -362,6 +362,105 @@ try {
 }
 
 
+
+// ==========================================
+// GESTÃO DE COMPETÊNCIA: MÊS E ANO
+// ==========================================
+let currentSelectedPeriod = '2026-08'; // 'YYYY-MM' ou 'all' ou 'YYYY'
+
+const MONTH_NAMES_PT = {
+    '01': 'Janeiro',
+    '02': 'Fevereiro',
+    '03': 'Março',
+    '04': 'Abril',
+    '05': 'Maio',
+    '06': 'Junho',
+    '07': 'Julho',
+    '08': 'Agosto',
+    '09': 'Setembro',
+    '10': 'Outubro',
+    '11': 'Novembro',
+    '12': 'Dezembro'
+};
+
+function formatPeriodLabel(key) {
+    if (key === 'all') return 'Todo o Período (Consolidado Geral)';
+    const parts = key.split('-');
+    if (parts.length === 2) {
+        const year = parts[0];
+        const mName = MONTH_NAMES_PT[parts[1]] || parts[1];
+        return `${mName} de ${year}`;
+    }
+    if (parts.length === 1 && parts[0].length === 4) {
+        return `Ano ${parts[0]} (Total Anual)`;
+    }
+    return key;
+}
+
+function populateMonthYearSelectors() {
+    const globalSel = document.getElementById('global-month-year-select');
+    const reportSel = document.getElementById('report-month-select');
+
+    // Extrair todos os meses e anos distintos presentes nas transações
+    const periodsSet = new Set();
+    const yearsSet = new Set();
+    getFilteredTransactions().forEach(t => {
+        if (t.date && t.date.length >= 7) {
+            const ym = t.date.substring(0, 7);
+            periodsSet.add(ym);
+            yearsSet.add(t.date.substring(0, 4));
+        }
+    });
+
+    const sortedPeriods = Array.from(periodsSet).sort().reverse();
+    const sortedYears = Array.from(yearsSet).sort().reverse();
+
+    let optionsHtml = '';
+    
+    if (sortedPeriods.length > 0) {
+        optionsHtml += '<optgroup label="Meses Disponíveis">';
+        sortedPeriods.forEach(p => {
+            const isSel = (currentSelectedPeriod === p) ? 'selected' : '';
+            optionsHtml += `<option value="${p}" ${isSel}>${formatPeriodLabel(p)}</option>`;
+        });
+        optionsHtml += '</optgroup>';
+    }
+
+    if (sortedYears.length > 0) {
+        optionsHtml += '<optgroup label="Consolidado Anual">';
+        sortedYears.forEach(y => {
+            const isSel = (currentSelectedPeriod === y) ? 'selected' : '';
+            optionsHtml += `<option value="${y}" ${isSel}>Ano ${y} (Total Acumulado)</option>`;
+        });
+        optionsHtml += '</optgroup>';
+    }
+
+    const isAllSel = (currentSelectedPeriod === 'all') ? 'selected' : '';
+    optionsHtml += `<option value="all" ${isAllSel}>Todo o Histórico (Visão Geral)</option>`;
+
+    if (globalSel) {
+        globalSel.innerHTML = optionsHtml;
+        globalSel.value = currentSelectedPeriod;
+    }
+    if (reportSel) {
+        reportSel.innerHTML = optionsHtml;
+        reportSel.value = currentSelectedPeriod;
+    }
+}
+
+function getFilteredTransactions() {
+    if (!currentSelectedPeriod || currentSelectedPeriod === 'all') {
+        return transactions;
+    }
+    if (currentSelectedPeriod.length === 7) {
+        return transactions.filter(t => t.date && t.date.startsWith(currentSelectedPeriod));
+    }
+    if (currentSelectedPeriod.length === 4) {
+        return transactions.filter(t => t.date && t.date.startsWith(currentSelectedPeriod));
+    }
+    return transactions;
+}
+
 function formatDateBr(dateString) {
     if(!dateString) return '';
     const p = dateString.split('-');
@@ -379,8 +478,8 @@ function addTransactionDOM(t) {
 }
 
 function updateValues() {
-    // Sistema exclusivo para despesas: consideramos todos os valores negativos ou convertidos para despesa
-    const expenses = transactions.map(t => Math.abs(t.amount));
+    const currentTxs = getFilteredTransactions();
+    const expenses = currentTxs.map(t => Math.abs(t.amount));
     const totalExp = expenses.reduce((acc, item) => acc + item, 0);
     const count = expenses.length;
     const avgExp = count > 0 ? (totalExp / count) : 0;
@@ -395,22 +494,26 @@ let catChartInstance = null;
 let cashChartInstance = null;
 
 function updateCharts() {
-    const expenses = transactions.filter(t => t.amount < 0);
+    const currentTxs = getFilteredTransactions();
+    const expenses = currentTxs.filter(t => t.amount < 0);
     const catTotals = {};
     expenses.forEach(t => { catTotals[t.category] = (catTotals[t.category] || 0) + Math.abs(t.amount); });
 
     const ctx1El = document.getElementById('categoryChart');
     if(ctx1El) {
         const categoryColorMap = {
-            "Saúde": "#ef4444",
-            "Alimentação": "#3b82f6",
-            "Moradia": "#8b5cf6",
-            "Educação": "#f59e0b",
-            "Transporte": "#10b981",
-            "Pessoal": "#ec4899",
-            "Cartão": "#6366f1",
+            "Plano de Saúde": "#0284c7",
+            "Extra - Consulta e Terapia": "#06b6d4",
+            "Farmacia": "#ec4899",
+            "Alimentação e Mercado": "#f97316",
+            "Educação": "#eab308",
+            "Parcela de Veículo e Manutenção": "#10b981",
+            "Salario Empregadas": "#8b5cf6",
             "Lazer": "#14b8a6",
-            "Outros": "#64748b"
+            "Condominio, Agua, Luz, Pisicina e Jardim": "#6366f1",
+            "Restaurante e App": "#f43f5e",
+            "Pessoal": "#d946ef",
+            "Outros": "#94a3b8"
         };
         const chartLabels = Object.keys(catTotals);
         const chartColors = chartLabels.map(l => categoryColorMap[l] || "#94a3b8");
@@ -465,7 +568,7 @@ function updateCharts() {
         
         // Agrupar despesas por dia
         const dailyTotals = {};
-        transactions.forEach(t => {
+        getFilteredTransactions().forEach(t => {
             const d = t.date ? t.date.split('-').slice(1).reverse().join('/') : 'Sem data';
             dailyTotals[d] = (dailyTotals[d] || 0) + Math.abs(t.amount);
         });
@@ -510,8 +613,10 @@ renderCategorizeTable();
 }
 
 function init() {
+    populateMonthYearSelectors();
     if(list) list.innerHTML = '';
-    transactions.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(addTransactionDOM);
+    const filtered = getFilteredTransactions();
+    filtered.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(addTransactionDOM);
     updateValues();
     updateCharts();
     updateDynamicMonthlyReport();
@@ -670,11 +775,10 @@ if (btnDownloadPdfInner) {
 
 function updateDynamicMonthlyReport() {
     const monthSelect = document.getElementById("report-month-select");
-    const selectedMonth = monthSelect ? monthSelect.value : "all";
+    const selectedMonth = monthSelect ? monthSelect.value : currentSelectedPeriod;
 
-    // Filtra transações pelo mês escolhido
     let filteredTxs = transactions.filter(t => t.amount < 0);
-    if (selectedMonth !== "all") {
+    if (selectedMonth && selectedMonth !== "all") {
         filteredTxs = filteredTxs.filter(t => t.date && t.date.startsWith(selectedMonth));
     }
 
@@ -704,9 +808,25 @@ function updateDynamicMonthlyReport() {
     if (argTotalEl) argTotalEl.innerText = "R$ " + totalExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-const reportMonthSelect = document.getElementById("report-month-select");
+// Sincronização dos Seletores de Mês e Ano
+const globalMonthSelect = document.getElementById('global-month-year-select');
+if (globalMonthSelect) {
+    globalMonthSelect.addEventListener('change', function() {
+        currentSelectedPeriod = this.value;
+        const reportSel = document.getElementById('report-month-select');
+        if (reportSel) reportSel.value = this.value;
+        init();
+    });
+}
+
+const reportMonthSelect = document.getElementById('report-month-select');
 if (reportMonthSelect) {
-    reportMonthSelect.addEventListener("change", updateDynamicMonthlyReport);
+    reportMonthSelect.addEventListener('change', function() {
+        currentSelectedPeriod = this.value;
+        const globSel = document.getElementById('global-month-year-select');
+        if (globSel) globSel.value = this.value;
+        init();
+    });
 }
 
 const CATEGORY_LIST = [
@@ -794,7 +914,8 @@ function renderCategorizeTable() {
     const selectedFilterCat = catFilter ? catFilter.value : "all";
 
     tbody.innerHTML = "";
-    let expenses = transactions.filter(t => t.amount < 0);
+    const currentTxs = getFilteredTransactions();
+    let expenses = currentTxs.filter(t => t.amount < 0);
 
     if (selectedFilterCat !== "all") {
         expenses = expenses.filter(t => t.category === selectedFilterCat);
