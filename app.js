@@ -12,337 +12,393 @@ const max_expense = document.getElementById('max-expense');
 
 const defaultAugustTransactions = [
     {
-        "id": 201,
+        "id": 301,
         "date": "2026-08-01",
-        "desc": "Unimed",
-        "amount": -1500,
-        "category": "Plano de Saúde"
-    },
-    {
-        "id": 202,
-        "date": "2026-08-02",
-        "desc": "Escola",
-        "amount": -1200,
-        "category": "Educação"
-    },
-    {
-        "id": 203,
-        "date": "2026-08-03",
-        "desc": "Polo",
-        "amount": -850,
-        "category": "Parcela de Veículo e Manutenção"
-    },
-    {
-        "id": 204,
-        "date": "2026-08-04",
-        "desc": "VIVO",
-        "amount": -250,
-        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
-    },
-    {
-        "id": 205,
-        "date": "2026-08-05",
-        "desc": "Dra. Fábia",
-        "amount": -500,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 206,
-        "date": "2026-08-06",
-        "desc": "Água e Luz",
-        "amount": -420,
-        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
-    },
-    {
-        "id": 207,
-        "date": "2026-08-07",
-        "desc": "Gasolina",
-        "amount": -400,
-        "category": "Parcela de Veículo e Manutenção"
-    },
-    {
-        "id": 208,
-        "date": "2026-08-08",
-        "desc": "Dra. Roberta",
-        "amount": -350,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 209,
-        "date": "2026-08-09",
-        "desc": "Mercado",
-        "amount": -1800,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 210,
-        "date": "2026-08-10",
-        "desc": "Compras do Mês / Consumo da Casa",
-        "amount": -2450,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 211,
-        "date": "2026-08-11",
-        "desc": "Farmácia",
-        "amount": -180,
-        "category": "Farmacia"
-    },
-    {
-        "id": 212,
-        "date": "2026-08-12",
-        "desc": "Academia",
-        "amount": -160,
-        "category": "Lazer"
-    },
-    {
-        "id": 213,
-        "date": "2026-08-13",
-        "desc": "Terapia",
-        "amount": -330,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 214,
-        "date": "2026-08-13",
-        "desc": "Faxina baía",
-        "amount": -200,
-        "category": "Salario Empregadas"
-    },
-    {
-        "id": 215,
-        "date": "2026-08-14",
-        "desc": "Aline",
-        "amount": -500,
-        "category": "Salario Empregadas"
-    },
-    {
-        "id": 216,
-        "date": "2026-08-14",
-        "desc": "Davi",
-        "amount": -100,
-        "category": "Educação"
-    },
-    {
-        "id": 217,
-        "date": "2026-08-15",
-        "desc": "Terapia",
-        "amount": -330,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 218,
-        "date": "2026-08-15",
-        "desc": "Carne",
-        "amount": -100,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 219,
-        "date": "2026-08-16",
-        "desc": "Terapia Davi",
-        "amount": -180,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 220,
-        "date": "2026-08-16",
-        "desc": "Água",
-        "amount": -20,
-        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
-    },
-    {
-        "id": 221,
-        "date": "2026-08-17",
-        "desc": "Condomínio",
-        "amount": -700,
-        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
-    },
-    {
-        "id": 222,
-        "date": "2026-08-18",
-        "desc": "Aline",
-        "amount": -400,
-        "category": "Salario Empregadas"
-    },
-    {
-        "id": 223,
-        "date": "2026-08-18",
-        "desc": "Frutas",
-        "amount": -50,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 224,
-        "date": "2026-08-19",
-        "desc": "Carne",
-        "amount": -200,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 225,
-        "date": "2026-08-20",
-        "desc": "Terapia",
-        "amount": -330,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 226,
-        "date": "2026-08-21",
-        "desc": "Terapia Davi",
-        "amount": -180,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 227,
-        "date": "2026-08-22",
-        "desc": "Padaria",
-        "amount": -60,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 228,
-        "date": "2026-08-23",
-        "desc": "Escola",
-        "amount": -20,
-        "category": "Educação"
-    },
-    {
-        "id": 229,
-        "date": "2026-08-24",
-        "desc": "Aline",
-        "amount": -400,
-        "category": "Salario Empregadas"
-    },
-    {
-        "id": 230,
-        "date": "2026-08-25",
-        "desc": "Frutas",
-        "amount": -50,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 231,
-        "date": "2026-08-26",
-        "desc": "Futsal",
-        "amount": -110,
-        "category": "Lazer"
-    },
-    {
-        "id": 232,
-        "date": "2026-08-27",
-        "desc": "Farmácia",
-        "amount": -130,
-        "category": "Farmacia"
-    },
-    {
-        "id": 233,
-        "date": "2026-08-27",
-        "desc": "Carne",
-        "amount": -150,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 234,
-        "date": "2026-08-28",
-        "desc": "Frutas",
-        "amount": -60,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 235,
-        "date": "2026-08-28",
-        "desc": "Terapia",
-        "amount": -330,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 236,
-        "date": "2026-08-29",
-        "desc": "Terapia Davi",
-        "amount": -180,
-        "category": "Extra - Consulta e Terapia"
-    },
-    {
-        "id": 237,
-        "date": "2026-08-29",
-        "desc": "Água",
-        "amount": -20,
-        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
-    },
-    {
-        "id": 238,
-        "date": "2026-08-30",
-        "desc": "Padaria",
-        "amount": -60,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 239,
-        "date": "2026-08-30",
-        "desc": "Carne",
-        "amount": -150,
-        "category": "Alimentação e Mercado"
-    },
-    {
-        "id": 240,
-        "date": "2026-08-31",
-        "desc": "Aline",
+        "desc": "restante",
         "amount": -300,
+        "category": "Pessoal"
+    },
+    {
+        "id": 302,
+        "date": "2026-08-02",
+        "desc": "Aline empregada",
+        "amount": -400,
         "category": "Salario Empregadas"
     },
     {
-        "id": 241,
-        "date": "2026-08-31",
-        "desc": "Terapia",
+        "id": 303,
+        "date": "2026-08-03",
+        "desc": "água",
+        "amount": -30,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 304,
+        "date": "2026-08-04",
+        "desc": "frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 305,
+        "date": "2026-08-05",
+        "desc": "fotos",
+        "amount": -50,
+        "category": "Pessoal"
+    },
+    {
+        "id": 306,
+        "date": "2026-08-06",
+        "desc": "carne",
+        "amount": -80,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 307,
+        "date": "2026-08-07",
+        "desc": "terapia jessika",
         "amount": -330,
         "category": "Extra - Consulta e Terapia"
     },
     {
-        "id": 242,
-        "date": "2026-08-31",
-        "desc": "Terapia Davi",
+        "id": 308,
+        "date": "2026-08-08",
+        "desc": "terapia Davi",
         "amount": -180,
         "category": "Extra - Consulta e Terapia"
     },
     {
-        "id": 243,
+        "id": 309,
+        "date": "2026-08-09",
+        "desc": "escola DAVI",
+        "amount": -60,
+        "category": "Educação"
+    },
+    {
+        "id": 310,
+        "date": "2026-08-10",
+        "desc": "Davi - escola",
+        "amount": -100,
+        "category": "Educação"
+    },
+    {
+        "id": 311,
+        "date": "2026-08-11",
+        "desc": "Aline empregada",
+        "amount": -400,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 312,
+        "date": "2026-08-12",
+        "desc": "condomínio",
+        "amount": -750,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 313,
+        "date": "2026-08-13",
+        "desc": "Davi ESCOLA",
+        "amount": -250,
+        "category": "Educação"
+    },
+    {
+        "id": 314,
+        "date": "2026-08-14",
+        "desc": "frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 315,
+        "date": "2026-08-15",
+        "desc": "carne",
+        "amount": -100,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 316,
+        "date": "2026-08-16",
+        "desc": "terapia jessika",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 317,
+        "date": "2026-08-17",
+        "desc": "Davi aula de futebol",
+        "amount": -80,
+        "category": "Lazer"
+    },
+    {
+        "id": 318,
+        "date": "2026-08-18",
+        "desc": "Aline empregada",
+        "amount": -400,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 319,
+        "date": "2026-08-19",
+        "desc": "frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 320,
+        "date": "2026-08-20",
+        "desc": "galinha",
+        "amount": -80,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 321,
+        "date": "2026-08-21",
+        "desc": "terapia jessika",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 322,
+        "date": "2026-08-22",
+        "desc": "terapia Davi",
+        "amount": -180,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 323,
+        "date": "2026-08-23",
+        "desc": "padaria",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 324,
+        "date": "2026-08-24",
+        "desc": "Aline - empregada",
+        "amount": -400,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 325,
+        "date": "2026-08-25",
+        "desc": "bolas",
+        "amount": -150,
+        "category": "Lazer"
+    },
+    {
+        "id": 326,
+        "date": "2026-08-26",
+        "desc": "carne",
+        "amount": -180,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 327,
+        "date": "2026-08-27",
+        "desc": "frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 328,
+        "date": "2026-08-28",
+        "desc": "terapia Jessika",
+        "amount": -330,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 329,
+        "date": "2026-08-29",
+        "desc": "terapia Davi",
+        "amount": -180,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 330,
+        "date": "2026-08-30",
+        "desc": "assessoria escolar",
+        "amount": -450,
+        "category": "Educação"
+    },
+    {
+        "id": 331,
         "date": "2026-08-31",
+        "desc": "Aline - empregada",
+        "amount": -400,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 332,
+        "date": "2026-08-01",
+        "desc": "frutas",
+        "amount": -50,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 333,
+        "date": "2026-08-02",
+        "desc": "escola",
+        "amount": -800,
+        "category": "Educação"
+    },
+    {
+        "id": 334,
+        "date": "2026-08-03",
+        "desc": "aula patins DAVI",
+        "amount": -60,
+        "category": "Lazer"
+    },
+    {
+        "id": 335,
+        "date": "2026-08-04",
+        "desc": "carne",
+        "amount": -100,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 336,
+        "date": "2026-08-05",
+        "desc": "faxina casa de PRAIA - laser - baia",
+        "amount": -100,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 337,
+        "date": "2026-08-06",
+        "desc": "empregada nete",
+        "amount": -1620,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 338,
+        "date": "2026-08-07",
+        "desc": "limpeza da piscina",
+        "amount": -200,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 339,
+        "date": "2026-08-08",
+        "desc": "jardinagem",
+        "amount": -200,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 340,
+        "date": "2026-08-09",
         "desc": "Plano de Saúde",
         "amount": -3300,
         "category": "Plano de Saúde"
     },
     {
-        "id": 244,
-        "date": "2026-08-20",
-        "desc": "Despesa do carro",
+        "id": 341,
+        "date": "2026-08-10",
+        "desc": "Despesa do carro (Parcela e Manutenção)",
         "amount": -2200,
         "category": "Parcela de Veículo e Manutenção"
     },
     {
-        "id": 245,
-        "date": "2026-08-10",
-        "desc": "Energia",
+        "id": 342,
+        "date": "2026-08-11",
+        "desc": "Energia elétrica",
         "amount": -450,
         "category": "Condominio, Agua, Luz, Pisicina e Jardim"
     },
     {
-        "id": 246,
+        "id": 343,
+        "date": "2026-08-12",
+        "desc": "Sacolão",
+        "amount": -249.59,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 344,
+        "date": "2026-08-13",
+        "desc": "Supermercado Bem Mais",
+        "amount": -480,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 345,
+        "date": "2026-08-14",
+        "desc": "Leitura e Livros (Davi)",
+        "amount": -110,
+        "category": "Educação"
+    },
+    {
+        "id": 346,
         "date": "2026-08-15",
-        "desc": "Limpeza da piscina",
-        "amount": -200,
+        "desc": "Novo Atacarejo chocolates",
+        "amount": -740,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 347,
+        "date": "2026-08-16",
+        "desc": "Despesas Diversas Família",
+        "amount": -270,
+        "category": "Pessoal"
+    },
+    {
+        "id": 348,
+        "date": "2026-08-17",
+        "desc": "Fotos",
+        "amount": -110,
+        "category": "Pessoal"
+    },
+    {
+        "id": 349,
+        "date": "2026-08-18",
+        "desc": "Sushi Restaurante",
+        "amount": -100,
+        "category": "Restaurante e App"
+    },
+    {
+        "id": 350,
+        "date": "2026-08-19",
+        "desc": "Rede Farma 3/3",
+        "amount": -230,
+        "category": "Farmacia"
+    },
+    {
+        "id": 351,
+        "date": "2026-08-20",
+        "desc": "Casa Tudo Utilidades",
+        "amount": -100,
         "category": "Condominio, Agua, Luz, Pisicina e Jardim"
     },
     {
-        "id": 247,
-        "date": "2026-08-25",
-        "desc": "Corte de grama",
-        "amount": -220,
-        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+        "id": 352,
+        "date": "2026-08-21",
+        "desc": "Americanas Compras",
+        "amount": -110,
+        "category": "Pessoal"
+    },
+    {
+        "id": 353,
+        "date": "2026-08-22",
+        "desc": "Colégio da Luz (Davi)",
+        "amount": -250,
+        "category": "Educação"
+    },
+    {
+        "id": 354,
+        "date": "2026-08-23",
+        "desc": "Supermercado Bem Mais",
+        "amount": -800,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 355,
+        "date": "2026-08-24",
+        "desc": "Sacolão",
+        "amount": -135,
+        "category": "Alimentação e Mercado"
     }
 ];
 
-const DATA_VERSION = 'v6_agosto_completo'
+const DATA_VERSION = 'v7_agosto_auditado_limpo';
 let transactions = defaultAugustTransactions;
 
 try {
