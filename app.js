@@ -569,6 +569,7 @@ function updateCharts() {
             "Condominio, Agua, Luz, Pisicina e Jardim": "#6366f1",
             "Restaurante e App": "#f43f5e",
             "Pessoal": "#d946ef",
+            "TAXAS, JUROS, IMPOSTOS E ETC.": "#64748b",
             "Outros": "#94a3b8"
         };
         const chartLabels = Object.keys(catTotals);
