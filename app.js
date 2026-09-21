@@ -694,6 +694,7 @@ function init() {
     updateCharts();
     updateDynamicMonthlyReport();
     if (typeof renderCategorizeTable === 'function') renderCategorizeTable();
+    if (typeof renderOrganizedTransactions === 'function') renderOrganizedTransactions();
 }
 
 if(form) form.addEventListener('submit', addTransaction);
@@ -1262,3 +1263,172 @@ if (formNewCat) {
     });
 }
 
+
+
+// ==========================================
+// RENDERIZAÇÃO DA TELA DE TRANSAÇÕES ORGANIZADA
+// ==========================================
+function renderOrganizedTransactions() {
+    const tbody = document.getElementById("tx-organized-tbody");
+    const countEl = document.getElementById("tx-summary-count");
+    const totalEl = document.getElementById("tx-summary-total");
+    const searchInput = document.getElementById("tx-search-input");
+    const catSelect = document.getElementById("tx-filter-category");
+    const sortSelect = document.getElementById("tx-sort-select");
+
+    if (!tbody) return;
+
+    // Preencher dropdown de categorias de transações caso necessário
+    if (catSelect && catSelect.options.length <= 1) {
+        catSelect.innerHTML = '<option value="all">Todas as Categorias</option>';
+        customCategories.forEach((cat, index) => {
+            const opt = document.createElement("option");
+            opt.value = cat.value;
+            opt.textContent = `${index + 1}. ${cat.value}`;
+            catSelect.appendChild(opt);
+        });
+    }
+
+    const searchTerm = (searchInput ? searchInput.value : "").trim().toLowerCase();
+    const selectedCat = catSelect ? catSelect.value : "all";
+    const selectedSort = sortSelect ? sortSelect.value : "date-desc";
+
+    let listTxs = [...getFilteredTransactions()];
+
+    // Filtro por categoria
+    if (selectedCat !== "all") {
+        listTxs = listTxs.filter(t => t.category === selectedCat);
+    }
+
+    // Filtro por texto / valor
+    if (searchTerm) {
+        listTxs = listTxs.filter(t => {
+            const descMatch = t.desc && t.desc.toLowerCase().includes(searchTerm);
+            const valMatch = t.amount && Math.abs(t.amount).toString().includes(searchTerm);
+            const catMatch = t.category && t.category.toLowerCase().includes(searchTerm);
+            return descMatch || valMatch || catMatch;
+        });
+    }
+
+    // Ordenação
+    listTxs.sort((a, b) => {
+        if (selectedSort === "date-desc") return new Date(b.date || "1970-01-01") - new Date(a.date || "1970-01-01");
+        if (selectedSort === "date-asc") return new Date(a.date || "1970-01-01") - new Date(b.date || "1970-01-01");
+        if (selectedSort === "val-desc") return Math.abs(b.amount) - Math.abs(a.amount);
+        if (selectedSort === "val-asc") return Math.abs(a.amount) - Math.abs(b.amount);
+        return 0;
+    });
+
+    const totalSum = listTxs.reduce((acc, t) => acc + Math.abs(t.amount), 0);
+
+    if (countEl) countEl.innerText = `${listTxs.length} Lançamentos`;
+    if (totalEl) totalEl.innerText = `Total: R$ ${totalSum.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+    tbody.innerHTML = "";
+
+    if (listTxs.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 35px 20px; color: #94a3b8; font-size: 0.95rem;">
+                    <i class="fas fa-inbox" style="font-size: 1.8rem; display: block; margin-bottom: 8px; color: #cbd5e1;"></i>
+                    Nenhum lançamento encontrado com os filtros selecionados.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    listTxs.forEach((t) => {
+        const tr = document.createElement("tr");
+        tr.style.cssText = "border-bottom: 1px solid #f1f5f9; transition: background 0.2s;";
+        tr.onmouseover = () => tr.style.background = "#f8fafc";
+        tr.onmouseout = () => tr.style.background = "transparent";
+
+        const catObj = customCategories.find(c => c.value === t.category) || { color: "#64748b", value: t.category };
+
+        tr.innerHTML = `
+            <td style="padding: 14px 16px; color: #64748b; font-size: 0.88rem; white-space: nowrap;">
+                <i class="far fa-calendar-alt" style="margin-right: 6px; color: #94a3b8;"></i>${t.date ? formatDateBr(t.date) : "Sem data"}
+            </td>
+            <td style="padding: 14px 16px; font-weight: 600; color: #1e293b;">
+                ${t.desc}
+            </td>
+            <td style="padding: 14px 16px;">
+                <span style="background: ${catObj.color}18; color: ${catObj.color}; border: 1px solid ${catObj.color}35; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;">
+                    <span style="width: 7px; height: 7px; border-radius: 50%; background: ${catObj.color};"></span>
+                    ${t.category}
+                </span>
+            </td>
+            <td style="padding: 14px 16px; text-align: right; font-weight: 700; color: #ef4444; font-size: 0.95rem; white-space: nowrap;">
+                - R$ ${Math.abs(t.amount).toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td style="padding: 14px 16px; text-align: center; white-space: nowrap;">
+                <button class="btn-tx-edit" title="Editar Lançamento" style="background: transparent; border: none; color: #3b82f6; cursor: pointer; font-size: 1.05rem; margin-right: 12px; padding: 2px 4px;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-tx-delete" title="Excluir Lançamento" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1.05rem; padding: 2px 4px;">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </td>
+        `;
+
+        // Ações de Editar e Excluir
+        const btnEdit = tr.querySelector(".btn-tx-edit");
+        btnEdit.onclick = () => {
+            const newDesc = prompt("Descrição da despesa:", t.desc);
+            if (newDesc === null) return;
+            const newDate = prompt("Data (YYYY-MM-DD):", t.date);
+            if (newDate === null) return;
+            const newValStr = prompt("Valor (ex: 150.50):", Math.abs(t.amount));
+            if (newValStr === null) return;
+            const newVal = parseFloat(newValStr.replace(",", "."));
+            if (isNaN(newVal)) {
+                alert("Valor inválido!");
+                return;
+            }
+            t.desc = newDesc.trim();
+            t.date = newDate.trim();
+            t.amount = -Math.abs(newVal);
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+            init();
+            showAutoSaveToast("Lançamento editado com sucesso!");
+        };
+
+        const btnDelete = tr.querySelector(".btn-tx-delete");
+        btnDelete.onclick = () => {
+            if (confirm(`Tem certeza que deseja excluir a despesa "${t.desc}"?`)) {
+                const idx = transactions.findIndex(tx => tx.id === t.id);
+                if (idx > -1) {
+                    transactions.splice(idx, 1);
+                    localStorage.setItem("transactions", JSON.stringify(transactions));
+                    init();
+                    showAutoSaveToast("Lançamento excluído com sucesso!");
+                }
+            }
+        };
+
+        tbody.appendChild(tr);
+    });
+}
+
+// Configurar event listeners da tela de transações
+function setupTransactionEventListeners() {
+    const searchInput = document.getElementById("tx-search-input");
+    const catSelect = document.getElementById("tx-filter-category");
+    const sortSelect = document.getElementById("tx-sort-select");
+    const clearBtn = document.getElementById("tx-btn-clear");
+
+    if (searchInput) searchInput.addEventListener("input", renderOrganizedTransactions);
+    if (catSelect) catSelect.addEventListener("change", renderOrganizedTransactions);
+    if (sortSelect) sortSelect.addEventListener("change", renderOrganizedTransactions);
+    if (clearBtn) {
+        clearBtn.addEventListener("click", () => {
+            if (searchInput) searchInput.value = "";
+            if (catSelect) catSelect.value = "all";
+            if (sortSelect) sortSelect.value = "date-desc";
+            renderOrganizedTransactions();
+        });
+    }
+}
+
+setupTransactionEventListeners();
