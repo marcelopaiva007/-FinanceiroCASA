@@ -58,9 +58,10 @@ const defaultAugustTransactions = [
     { id: 240, date: '2026-08-31', desc: 'Aline', amount: -300.00, category: 'Outros' },
     { id: 241, date: '2026-08-31', desc: 'Terapia', amount: -330.00, category: 'Saúde' },
     { id: 242, date: '2026-08-31', desc: 'Terapia Davi', amount: -180.00, category: 'Saúde' },
+    { id: 243, date: '2026-08-31', desc: 'Plano de Saúde', amount: -3300.00, category: 'Saúde' },
 
     // --- Receita Base Consolidada ---
-    { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 18000.00, category: 'Receita' }
+    { id: 101, date: '2026-08-01', desc: 'Receita / Salário', amount: 22000.00, category: 'Receita' }
 ];
 
 let transactions = defaultAugustTransactions;
