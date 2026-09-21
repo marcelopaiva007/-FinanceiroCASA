@@ -12,7 +12,7 @@
 <body>
     <div class="sidebar">
         <h2><i class="fas fa-chart-pie"></i> BI Financeiro</h2>
-        <div style="padding: 4px 12px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #3b82f6;"><i class="fas fa-code-branch"></i> <span class="sys-version-badge">Versão 3.2</span></div>
+        <div style="padding: 4px 12px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 20px; font-size: 0.75rem; font-weight: 700; color: #3b82f6;"><i class="fas fa-code-branch"></i> <span class="sys-version-badge">Versão 3.3</span></div>
         <ul>
             <li id="tab-overview" class="active" style="cursor:pointer"><i class="fas fa-home"></i> Visão Geral</li>
             <li id="tab-categories" style="cursor:pointer"><i class="fas fa-sitemap"></i> Categorias de Despesas</li>
@@ -24,7 +24,7 @@
     <div class="main-content">
                 <header style="position: relative; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 15px;">
             <div>
-                <h1>Despesas do Mês <span style="font-size: 0.85rem; font-weight: 700; vertical-align: middle; background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 12px; margin-left: 8px; letter-spacing: 0.5px;">v3.2 Mensal & Anual</span></h1>
+                <h1>Despesas do Mês <span style="font-size: 0.85rem; font-weight: 700; vertical-align: middle; background: #0284c7; color: #ffffff; padding: 4px 10px; border-radius: 12px; margin-left: 8px; letter-spacing: 0.5px;">v3.3 Mensal & Anual</span></h1>
                 <p>Acompanhamento inteligente do orçamento doméstico por Mês e Ano &bull; <span style="color: #0284c7; font-weight: 600;">Visão Mensal & Consolidada</span></p>
             </div>
             
@@ -183,7 +183,7 @@
                     <div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
                             <h3 style="font-size: 1.25rem; color: #111827; margin: 0;">Conferência & Alteração de Todas as Despesas</h3>
-                            <span style="background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Versão do Sistema: v3.2</span>
+                            <span style="background: #dbeafe; color: #1e40af; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">Versão do Sistema: v3.3</span>
                         </div>
                         <p style="font-size: 0.88rem; color: #64748b; margin: 0;">Confira cada lançamento da casa e altere a categoria de qualquer despesa diretamente no menu suspenso abaixo. Todas as alterações são salvas automaticamente e atualizam os gráficos e o plano de corte na hora.</p>
                     </div>
@@ -228,14 +228,78 @@
         </div>
 
 
+        
+        <!-- TELA EXCLUSIVA 3: TRANSAÇÕES / EXTRATO DETALHADO E ORGANIZADO -->
         <div id="view-transactions" class="view-section" style="display: none; padding-top: 20px;">
-            <div class="card">
-                <h3>Histórico Completo</h3>
-                <ul id="list" class="list"></ul>
+            <div class="card" style="display: block; margin-bottom: 25px; border-left: 5px solid #6366f1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="font-size: 1.3rem; margin: 0 0 6px 0; color: #1e293b; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-receipt" style="color: #6366f1;"></i> Extrato Detalhado de Transações
+                        </h3>
+                        <p style="color: #64748b; font-size: 0.92rem; margin: 0;">
+                            Histórico cronológico organizado de todos os lançamentos com pesquisa rápida, filtros por categoria e ordenação.
+                        </p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <span id="tx-summary-count" style="background: #e0e7ff; color: #4338ca; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
+                            0 Lançamentos
+                        </span>
+                        <span id="tx-summary-total" style="background: #fee2e2; color: #991b1b; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem;">
+                            Total: R$ 0,00
+                        </span>
+                    </div>
+                </div>
+
+                <!-- BARRA DE CONTROLE E FILTROS DA TELA DE TRANSAÇÕES -->
+                <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid #e2e8f0; align-items: center;">
+                    <div style="flex: 2; min-width: 220px; position: relative;">
+                        <input type="text" id="tx-search-input" placeholder="Buscar por descrição ou valor (ex: terapia, aline, carne)..." style="width: 100%; padding: 9px 12px 9px 36px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.88rem; background: #ffffff; outline: none;">
+                        <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.9rem;"></i>
+                    </div>
+                    <div style="flex: 1; min-width: 180px;">
+                        <select id="tx-filter-category" style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.88rem; background: #ffffff; color: #1e293b; font-weight: 500; outline: none;">
+                            <option value="all">Todas as Categorias</option>
+                        </select>
+                    </div>
+                    <div style="min-width: 160px;">
+                        <select id="tx-sort-select" style="width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.88rem; background: #ffffff; color: #1e293b; font-weight: 500; outline: none;">
+                            <option value="date-desc">Mais Recentes Primeiro</option>
+                            <option value="date-asc">Mais Antigos Primeiro</option>
+                            <option value="val-desc">Maior Valor</option>
+                            <option value="val-asc">Menor Valor</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button id="tx-btn-clear" style="padding: 9px 14px; border-radius: 8px; background: #e2e8f0; color: #475569; border: none; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; height: 38px;">
+                            <i class="fas fa-times"></i> Limpar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TABELA ORGANIZADA E MODERNA DE TRANSAÇÕES -->
+                <div style="overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left;">
+                        <thead>
+                            <tr style="background: #f1f5f9; color: #334155; border-bottom: 2px solid #cbd5e1;">
+                                <th style="padding: 14px 16px; font-weight: 700; width: 120px;">Data</th>
+                                <th style="padding: 14px 16px; font-weight: 700;">Descrição</th>
+                                <th style="padding: 14px 16px; font-weight: 700; width: 230px;">Categoria</th>
+                                <th style="padding: 14px 16px; font-weight: 700; text-align: right; width: 140px;">Valor</th>
+                                <th style="padding: 14px 16px; font-weight: 700; text-align: center; width: 110px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tx-organized-tbody">
+                            <!-- Preenchido dinamicamente via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- LISTA COMPLEMENTAR LEGACY (MANTIDA OCULTA PARA COMPATIBILIDADE DOM) -->
+                <ul id="list" class="list" style="display: none;"></ul>
             </div>
         </div>
 
-                
         <div id="view-goals" class="view-section" style="display: none; padding-top: 20px;">
             <!-- SELETOR DE MES RECORRENTE -->
             <div style="background: var(--card-bg, #ffffff); border-radius: 12px; padding: 18px 24px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: var(--shadow);">
@@ -267,7 +331,7 @@
                     </div>
                     <div style="text-align: right;">
                         <div id="dyn-report-period" style="font-size: 0.9rem; font-weight: 700; color: #0284c7;">Base de Dados: Agosto de 2026 (Auditado)</div>
-                        <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 3px;">Versão do Sistema: v3.2 &bull; Atualizado</div>
+                        <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 3px;">Versão do Sistema: v3.3 &bull; Atualizado</div>
                     </div>
                 </div>
 
@@ -497,7 +561,7 @@
                 if (typeof renderCategorizeTable === 'function') renderCategorizeTable();
             });
         }
-        t2.addEventListener('click', () => { resetTabs(); t2.classList.add('active'); v2.style.display = 'block'; });
+        t2.addEventListener('click', () => { resetTabs(); t2.classList.add('active'); v2.style.display = 'block'; if (typeof renderOrganizedTransactions === 'function') renderOrganizedTransactions(); });
         t3.addEventListener('click', () => { resetTabs(); t3.classList.add('active'); v3.style.display = 'block'; });
     </script>
 
