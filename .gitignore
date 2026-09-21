@@ -1,1 +1,10 @@
 .DS_Store
+node_modules/
+package.json
+package-lock.json
+audited_transactions.json
+*.py
+*.swift
+ocr_bin
+*.png
+test*.js
