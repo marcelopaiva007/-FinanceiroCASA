@@ -670,6 +670,8 @@ renderCategorizeTable();
 }
 
 function init() {
+    populateCategoryDropdowns();
+    renderCategoriesManagement();
     populateMonthYearSelectors();
     if(list) list.innerHTML = '';
     const filtered = getFilteredTransactions();
@@ -885,68 +887,37 @@ if (reportMonthSelect) {
     });
 }
 
-const CATEGORY_LIST = [
-    {
-        "value": "Plano de Saúde",
-        "label": "1. Plano de Saúde",
-        "color": "#0284c7"
-    },
-    {
-        "value": "Extra - Consulta e Terapia",
-        "label": "2. Extra - Consulta e Terapia",
-        "color": "#06b6d4"
-    },
-    {
-        "value": "Farmacia",
-        "label": "3. Farmacia",
-        "color": "#ec4899"
-    },
-    {
-        "value": "Alimentação e Mercado",
-        "label": "4. Alimentação e Mercado",
-        "color": "#f97316"
-    },
-    {
-        "value": "Educação",
-        "label": "5. Educação",
-        "color": "#eab308"
-    },
-    {
-        "value": "Parcela de Veículo e Manutenção",
-        "label": "6. Parcela de Veículo e Manutenção",
-        "color": "#10b981"
-    },
-    {
-        "value": "Salario Empregadas",
-        "label": "7. Salario Empregadas (Aline / Nete / Faxina)",
-        "color": "#8b5cf6"
-    },
-    {
-        "value": "Lazer",
-        "label": "8. Lazer",
-        "color": "#14b8a6"
-    },
-    {
-        "value": "Condominio, Agua, Luz, Pisicina e Jardim",
-        "label": "9. Condominio, Agua, Luz, Pisicina e Jardim",
-        "color": "#6366f1"
-    },
-    {
-        "value": "Restaurante e App",
-        "label": "10. Restaurante e App",
-        "color": "#f43f5e"
-    },
-    {
-        "value": "Pessoal",
-        "label": "11. Despesas Pessoais & Família",
-        "color": "#d946ef"
-    },
-    {
-        "value": "Outros",
-        "label": "Outros",
-        "color": "#94a3b8"
-    }
+
+const DEFAULT_CATEGORIES = [
+    { value: "Plano de Saúde", label: "1. Plano de Saúde", color: "#0284c7", desc: "Plano de saúde fixo da família e Unimed." },
+    { value: "Extra - Consulta e Terapia", label: "2. Extra - Consulta e Terapia", color: "#06b6d4", desc: "Terapias (Marcelo, Jessika e Davi), consultas com Dra. Fábia, Dra. Roberta, etc." },
+    { value: "Farmacia", label: "3. Farmacia", color: "#ec4899", desc: "Remédios contínuos, farmácias e cuidados pontuais de saúde." },
+    { value: "Alimentação e Mercado", label: "4. Alimentação e Mercado", color: "#f97316", desc: "Supermercado, açougue/carnes, hortifrúti/frutas e padarias." },
+    { value: "Educação", label: "5. Educação", color: "#eab308", desc: "Mensalidade escolar e despesas educacionais do Davi." },
+    { value: "Parcela de Veículo e Manutenção", label: "6. Parcela de Veículo e Manutenção", color: "#10b981", desc: "Parcela do Polo, gasolina/combustível e manutenções do carro." },
+    { value: "Salario Empregadas", label: "7. Salario Empregadas", color: "#8b5cf6", desc: "Pagamentos de empregadas: Aline, Nete, faxina da baía/praia e serviços domésticos." },
+    { value: "Lazer", label: "8. Lazer", color: "#14b8a6", desc: "Futsal, academia, passeios, patins e esportes familiares." },
+    { value: "Condominio, Agua, Luz, Pisicina e Jardim", label: "9. Condominio, Agua, Luz, Pisicina e Jardim", color: "#6366f1", desc: "Taxa de condomínio, conta de energia, água, internet, piscina e corte de grama." },
+    { value: "Restaurante e App", label: "10. Restaurante e App", color: "#f43f5e", desc: "Restaurantes, lanchonetes, iFood e entregas por aplicativo." },
+    { value: "Pessoal", label: "11. Despesas Pessoais & Família", color: "#d946ef", desc: "Gastos avulsos, compras individuais da família e mesadas." },
+    { value: "TAXAS, JUROS, IMPOSTOS E ETC.", label: "12. TAXAS, JUROS, IMPOSTOS E ETC.", color: "#64748b", desc: "Tarifas bancárias, juros de conta/cartão, IOF, impostos, taxas governamentais e multas." }
 ];
+
+let customCategories = DEFAULT_CATEGORIES;
+try {
+    const savedCats = localStorage.getItem("custom_categories");
+    if (savedCats) {
+        customCategories = JSON.parse(savedCats);
+    } else {
+        localStorage.setItem("custom_categories", JSON.stringify(DEFAULT_CATEGORIES));
+    }
+} catch (e) {
+    customCategories = DEFAULT_CATEGORIES;
+}
+
+// Mantemos CATEGORY_LIST como getter ou apontando para customCategories
+var CATEGORY_LIST = customCategories;
+
 
 function renderCategorizeTable() {
     const tbody = document.getElementById("categorize-table-body");
@@ -1092,3 +1063,185 @@ function renderCategorizeTable() {
 }
 
 init();
+
+
+// ==========================================
+// GESTÃO DINÂMICA DE CATEGORIAS (CRUD)
+// ==========================================
+function saveCategories() {
+    localStorage.setItem("custom_categories", JSON.stringify(customCategories));
+    CATEGORY_LIST = customCategories;
+    populateCategoryDropdowns();
+    renderCategoriesManagement();
+    updateCharts();
+    if (typeof renderCategorizeTable === "function") renderCategorizeTable();
+}
+
+function populateCategoryDropdowns() {
+    // 1. Dropdown do formulário de novo lançamento rápido
+    const catFormSelect = document.getElementById("category");
+    if (catFormSelect) {
+        const prevVal = catFormSelect.value;
+        catFormSelect.innerHTML = "";
+        customCategories.forEach((cat, index) => {
+            const opt = document.createElement("option");
+            opt.value = cat.value;
+            opt.textContent = `${index + 1}. ${cat.value}`;
+            catFormSelect.appendChild(opt);
+        });
+        const optOutros = document.createElement("option");
+        optOutros.value = "Outros";
+        optOutros.textContent = "Outros";
+        catFormSelect.appendChild(optOutros);
+        if (prevVal) catFormSelect.value = prevVal;
+    }
+
+    // 2. Dropdown de filtro da tabela de conferência
+    const catFilterSelect = document.getElementById("filter-category-select");
+    if (catFilterSelect) {
+        const prevFilter = catFilterSelect.value || "all";
+        catFilterSelect.innerHTML = '<option value="all">Todas as Categorias</option>';
+        customCategories.forEach((cat, index) => {
+            const opt = document.createElement("option");
+            opt.value = cat.value;
+            opt.textContent = `${index + 1}. ${cat.value}`;
+            catFilterSelect.appendChild(opt);
+        });
+        catFilterSelect.value = prevFilter;
+    }
+}
+
+function renderCategoriesManagement() {
+    const container = document.getElementById("categories-cards-container");
+    const countBadge = document.getElementById("categories-count-badge");
+    if (!container) return;
+
+    if (countBadge) countBadge.innerText = `${customCategories.length} Categorias Ativas`;
+
+    container.innerHTML = "";
+    customCategories.forEach((cat, index) => {
+        const card = document.createElement("div");
+        card.style.cssText = `background: #ffffff; border: 1px solid #e2e8f0; border-left: 5px solid ${cat.color}; padding: 14px 16px; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05);`;
+
+        card.innerHTML = `
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                    <strong style="color: ${cat.color}; font-size: 0.95rem;">
+                        <i class="fas fa-tag" style="margin-right: 4px;"></i> ${index + 1}. ${cat.value}
+                    </strong>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="btn-edit-cat" title="Editar Categoria" style="background: transparent; border: none; color: #3b82f6; cursor: pointer; font-size: 1rem; padding: 2px 4px;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete-cat" title="Excluir Categoria" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 2px 4px;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <p style="font-size: 0.82rem; color: #64748b; margin: 0 0 10px 0; line-height: 1.4;">
+                    ${cat.desc || "Sem descrição informada."}
+                </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f1f5f9; padding-top: 8px; font-size: 0.78rem; color: #94a3b8;">
+                <span>Cor do Gráfico:</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: ${cat.color};"></span>
+                    <code style="color: #475569;">${cat.color}</code>
+                </div>
+            </div>
+        `;
+
+        // Ação de Editar Categoria
+        const btnEdit = card.querySelector(".btn-edit-cat");
+        btnEdit.onclick = () => {
+            const newName = prompt("Nome da Categoria:", cat.value);
+            if (newName === null || !newName.trim()) return;
+
+            const newDesc = prompt("Descrição / Exemplo de Gastos:", cat.desc || "");
+            const newColor = prompt("Cor em Hexadecimal (ex: #3b82f6):", cat.color);
+
+            const oldVal = cat.value;
+            cat.value = newName.trim();
+            cat.label = `${index + 1}. ${cat.value}`;
+            if (newDesc !== null) cat.desc = newDesc.trim();
+            if (newColor !== null && newColor.trim()) cat.color = newColor.trim();
+
+            // Atualizar transações que usavam o nome antigo
+            transactions.forEach(t => {
+                if (t.category === oldVal) {
+                    t.category = cat.value;
+                }
+            });
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+
+            saveCategories();
+            init();
+        };
+
+        // Ação de Excluir Categoria
+        const btnDelete = card.querySelector(".btn-delete-cat");
+        btnDelete.onclick = () => {
+            const totalInCat = transactions.filter(t => t.category === cat.value).length;
+            const msg = totalInCat > 0
+                ? `Existem ${totalInCat} despesas cadastradas na categoria "${cat.value}". Ao excluir, elas passarão para "Outros". Deseja continuar?`
+                : `Tem certeza que deseja excluir a categoria "${cat.value}"?`;
+
+            if (confirm(msg)) {
+                transactions.forEach(t => {
+                    if (t.category === cat.value) {
+                        t.category = "Outros";
+                    }
+                });
+                localStorage.setItem("transactions", JSON.stringify(transactions));
+
+                customCategories = customCategories.filter(c => c.value !== cat.value);
+                saveCategories();
+                init();
+            }
+        };
+
+        container.appendChild(card);
+    });
+}
+
+// Formulário de Cadastro de Nova Categoria
+const formNewCat = document.getElementById("form-new-category");
+if (formNewCat) {
+    formNewCat.addEventListener("submit", function(e) {
+        e.preventDefault();
+        const nameInput = document.getElementById("new-cat-name");
+        const descInput = document.getElementById("new-cat-desc");
+        const colorInput = document.getElementById("new-cat-color");
+
+        const nameVal = nameInput ? nameInput.value.trim() : "";
+        const descVal = descInput ? descInput.value.trim() : "";
+        const colorVal = colorInput ? colorInput.value : "#0284c7";
+
+        if (!nameVal) {
+            alert("Por favor, digite o nome da categoria.");
+            return;
+        }
+
+        const exists = customCategories.some(c => c.value.toLowerCase() === nameVal.toLowerCase());
+        if (exists) {
+            alert("Já existe uma categoria com este nome!");
+            return;
+        }
+
+        const newEntry = {
+            value: nameVal,
+            label: `${customCategories.length + 1}. ${nameVal}`,
+            color: colorVal,
+            desc: descVal || "Categoria personalizada."
+        };
+
+        customCategories.push(newEntry);
+        saveCategories();
+        init();
+
+        if (nameInput) nameInput.value = "";
+        if (descInput) descInput.value = "";
+        alert(`Categoria "${nameVal}" cadastrada com sucesso!`);
+    });
+}
+
