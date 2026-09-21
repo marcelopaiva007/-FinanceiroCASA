@@ -1820,3 +1820,85 @@ const btnResetCut = document.getElementById("btn-reset-cut-selection");
 if (btnResetCut) {
     btnResetCut.addEventListener("click", resetCuttableSettingsToDefault);
 }
+
+
+// ==========================================
+// SEGURANÇA E PROTEÇÃO POR SENHA (ACESSO RESTRITO)
+// ==========================================
+const SYSTEM_PASS = "12345678";
+
+function checkSystemAuthentication() {
+    const lockScreen = document.getElementById("auth-lock-screen");
+    const isAuth = sessionStorage.getItem("finance_casa_auth") === "true";
+
+    if (isAuth) {
+        if (lockScreen) lockScreen.style.display = "none";
+    } else {
+        if (lockScreen) {
+            lockScreen.style.display = "flex";
+            const passInput = document.getElementById("auth-password-input");
+            if (passInput) {
+                passInput.value = "";
+                passInput.focus();
+            }
+        }
+    }
+}
+
+function handleAuthSubmit() {
+    const passInput = document.getElementById("auth-password-input");
+    const errorMsg = document.getElementById("auth-error-msg");
+    const lockScreen = document.getElementById("auth-lock-screen");
+
+    if (!passInput) return;
+
+    const entered = passInput.value.trim();
+    if (entered === SYSTEM_PASS) {
+        sessionStorage.setItem("finance_casa_auth", "true");
+        if (errorMsg) errorMsg.style.display = "none";
+        if (lockScreen) lockScreen.style.display = "none";
+        showAutoSaveToast("Acesso liberado com sucesso!");
+    } else {
+        if (errorMsg) errorMsg.style.display = "block";
+        passInput.value = "";
+        passInput.focus();
+        passInput.style.borderColor = "#ef4444";
+        setTimeout(() => { passInput.style.borderColor = "#cbd5e1"; }, 1500);
+    }
+}
+
+function setupAuthEventListeners() {
+    const authForm = document.getElementById("auth-form");
+    const passInput = document.getElementById("auth-password-input");
+    const lockBtn = document.getElementById("lock-system-btn");
+
+    if (authForm) {
+        authForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            handleAuthSubmit();
+        });
+    }
+
+    if (passInput) {
+        passInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                handleAuthSubmit();
+            }
+        });
+    }
+
+    if (lockBtn) {
+        lockBtn.addEventListener("click", () => {
+            if (confirm("Deseja bloquear o sistema e sair?")) {
+                sessionStorage.removeItem("finance_casa_auth");
+                checkSystemAuthentication();
+            }
+        });
+    }
+
+    // Checar autenticação imediatamente na carga
+    checkSystemAuthentication();
+}
+
+setupAuthEventListeners();
