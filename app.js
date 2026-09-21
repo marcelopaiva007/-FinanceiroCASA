@@ -220,6 +220,7 @@ function init() {
     transactions.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(addTransactionDOM);
     updateValues();
     updateCharts();
+    updateDynamicMonthlyReport();
 }
 
 if(form) form.addEventListener('submit', addTransaction);
@@ -327,4 +328,88 @@ if (resetDataBtn) {
             alert('Todas as despesas de Agosto de 2026 foram carregadas com sucesso!');
         }
     });
+}
+function downloadPDFReport() {
+    const element = document.getElementById("report-pdf-container");
+    if (!element) {
+        alert("Erro: Relatório não encontrado.");
+        return;
+    }
+
+    // Se estiver em outra aba, abre temporariamente para renderizar
+    const viewGoals = document.getElementById("view-goals");
+    const prevDisplay = viewGoals.style.display;
+    viewGoals.style.display = "block";
+
+    const opt = {
+        margin: [10, 10, 10, 10],
+        filename: "Relatorio_Reducao_Despesas_30_Familia.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    };
+
+    if (typeof html2pdf !== "undefined") {
+        html2pdf().set(opt).from(element).save().then(() => {
+            viewGoals.style.display = prevDisplay;
+        }).catch(err => {
+            console.error(err);
+            viewGoals.style.display = prevDisplay;
+            window.print();
+        });
+    } else {
+        viewGoals.style.display = prevDisplay;
+        window.print();
+    }
+}
+
+const pdfReportBtn = document.getElementById("pdf-report-btn");
+if (pdfReportBtn) {
+    pdfReportBtn.addEventListener("click", downloadPDFReport);
+}
+
+const btnDownloadPdfInner = document.getElementById("btn-download-pdf-inner");
+if (btnDownloadPdfInner) {
+    btnDownloadPdfInner.addEventListener("click", downloadPDFReport);
+}
+
+function updateDynamicMonthlyReport() {
+    const monthSelect = document.getElementById("report-month-select");
+    const selectedMonth = monthSelect ? monthSelect.value : "all";
+
+    // Filtra transações pelo mês escolhido
+    let filteredTxs = transactions.filter(t => t.amount < 0);
+    if (selectedMonth !== "all") {
+        filteredTxs = filteredTxs.filter(t => t.date && t.date.startsWith(selectedMonth));
+    }
+
+    const totalExp = filteredTxs.reduce((sum, t) => sum + Math.abs(t.amount), 0);
+    const cutMeta = totalExp * 0.30;
+    const targetExp = totalExp * 0.70;
+
+    const periodEl = document.getElementById("dyn-report-period");
+    const totalEl = document.getElementById("dyn-report-total");
+    const cutEl = document.getElementById("dyn-report-cut");
+    const targetEl = document.getElementById("dyn-report-target");
+    const argTotalEl = document.getElementById("dyn-arg-total");
+
+    const monthNames = {
+        "2026-08": "Agosto/2026",
+        "2026-09": "Setembro/2026",
+        "2026-10": "Outubro/2026",
+        "2026-11": "Novembro/2026",
+        "2026-12": "Dezembro/2026",
+        "all": "Consolidado Geral"
+    };
+
+    if (periodEl) periodEl.innerText = "Base de Dados: " + (monthNames[selectedMonth] || selectedMonth);
+    if (totalEl) totalEl.innerText = "R$ " + totalExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (cutEl) cutEl.innerText = "R$ " + cutMeta.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (targetEl) targetEl.innerText = "R$ " + targetExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (argTotalEl) argTotalEl.innerText = "R$ " + totalExp.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+const reportMonthSelect = document.getElementById("report-month-select");
+if (reportMonthSelect) {
+    reportMonthSelect.addEventListener("change", updateDynamicMonthlyReport);
 }
