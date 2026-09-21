@@ -409,10 +409,143 @@ const defaultAugustTransactions = [
         "desc": "Sacolão",
         "amount": -135,
         "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 501,
+        "date": "2026-09-02",
+        "desc": "Terapia Jessika",
+        "amount": -330.0,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 502,
+        "date": "2026-09-03",
+        "desc": "Faxina baía",
+        "amount": -200.0,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 503,
+        "date": "2026-09-04",
+        "desc": "Aline funcionária",
+        "amount": -500.0,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 504,
+        "date": "2026-09-05",
+        "desc": "Davi",
+        "amount": -100.0,
+        "category": "Educação"
+    },
+    {
+        "id": 505,
+        "date": "2026-09-07",
+        "desc": "Terapia Jessika",
+        "amount": -330.0,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 506,
+        "date": "2026-09-08",
+        "desc": "Carne",
+        "amount": -100.0,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 507,
+        "date": "2026-09-09",
+        "desc": "Terapia Davi",
+        "amount": -180.0,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 508,
+        "date": "2026-09-10",
+        "desc": "Água mineral para casa",
+        "amount": -20.0,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 509,
+        "date": "2026-09-10",
+        "desc": "Condomínio de casa",
+        "amount": -700.0,
+        "category": "Condominio, Agua, Luz, Pisicina e Jardim"
+    },
+    {
+        "id": 510,
+        "date": "2026-09-11",
+        "desc": "Aline funcionária",
+        "amount": -400.0,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 511,
+        "date": "2026-09-12",
+        "desc": "Frutas",
+        "amount": -50.0,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 512,
+        "date": "2026-09-14",
+        "desc": "Carne",
+        "amount": -200.0,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 513,
+        "date": "2026-09-15",
+        "desc": "Terapia Jessika",
+        "amount": -330.0,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 514,
+        "date": "2026-09-16",
+        "desc": "Terapia Davi",
+        "amount": -180.0,
+        "category": "Extra - Consulta e Terapia"
+    },
+    {
+        "id": 515,
+        "date": "2026-09-17",
+        "desc": "Padaria",
+        "amount": -60.0,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 516,
+        "date": "2026-09-18",
+        "desc": "Escola",
+        "amount": -20.0,
+        "category": "Educação"
+    },
+    {
+        "id": 517,
+        "date": "2026-09-19",
+        "desc": "Aline funcionária",
+        "amount": -400.0,
+        "category": "Salario Empregadas"
+    },
+    {
+        "id": 518,
+        "date": "2026-09-20",
+        "desc": "Frutas",
+        "amount": -50.0,
+        "category": "Alimentação e Mercado"
+    },
+    {
+        "id": 519,
+        "date": "2026-09-21",
+        "desc": "Futsal de DAVI",
+        "amount": -110.0,
+        "category": "Lazer"
     }
 ];
 
-const DATA_VERSION = 'v7_agosto_auditado_limpo';
+const DATA_VERSION = 'v8_agosto_e_setembro_2026';
 let transactions = defaultAugustTransactions;
 
 try {
